@@ -6,7 +6,11 @@
 
     <groupId>OtusJava</groupId>
     <artifactId>OtusJava</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>hw02-maven</module>
+    </modules>
 
     <dependencies>
         <dependency>

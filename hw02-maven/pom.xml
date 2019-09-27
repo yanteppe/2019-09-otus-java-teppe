@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
+        <groupId>ru.otus</groupId>
         <artifactId>OtusJava</artifactId>
-        <groupId>OtusJava</groupId>
         <version>2019-09-SNAPSHOT</version>
     </parent>
 
@@ -37,15 +37,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>make-assembly</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>single</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
             </plugin>
         </plugins>
     </build>

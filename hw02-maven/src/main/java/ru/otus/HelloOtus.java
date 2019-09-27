@@ -11,11 +11,6 @@ import java.util.List;
  * Guava demo class
  */
 public class HelloOtus {
-    public static void main(String args[]) {
-        ArrayList<Integer> numbers = Lists.newArrayList(2, 6, 7, 1, 0, 3, 10, 4, 8, 5, 9);
-        System.out.println("List: " + numbers);
-        System.out.println("Sorted list: " + new HelloOtus().getSortedNumbers(numbers));
-    }
 
     /**
      * Sort integers through Guava
@@ -23,7 +18,7 @@ public class HelloOtus {
      * @param numbers list of numbers
      * @return sorted list of numbers
      */
-    private List getSortedNumbers(List numbers) {
+    protected List getSortedNumbers(List numbers) {
         numbers.sort(Ordering.natural());
         return numbers;
     }

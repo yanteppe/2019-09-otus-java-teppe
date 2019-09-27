@@ -10,7 +10,7 @@ import java.util.List;
  * Home work №1. Maven.
  * Guava demo class
  */
-public class HelloOtus {
+class HelloOtus {
 
     /**
      * Sort integers through Guava
@@ -18,7 +18,7 @@ public class HelloOtus {
      * @param numbers list of numbers
      * @return sorted list of numbers
      */
-    protected List getSortedNumbers(List numbers) {
+    List getSortedNumbers(List numbers) {
         numbers.sort(Ordering.natural());
         return numbers;
     }

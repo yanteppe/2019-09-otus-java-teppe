@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Home work №2. Maven.
+ * Home work №1. Maven.
  * Guava demo class
  */
 public class HelloOtus {

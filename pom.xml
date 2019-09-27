@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>hw02-maven</module>
+        <module>hw01-maven</module>
     </modules>
 
     <properties>

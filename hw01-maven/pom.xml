@@ -10,8 +10,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>hw02-maven</artifactId>
-    <name>hw02-maven</name>
+    <artifactId>hw01-maven</artifactId>
+    <name>hw01-maven</name>
 
     <packaging>jar</packaging>
 

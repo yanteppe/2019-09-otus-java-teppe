@@ -42,7 +42,6 @@ public class DIYArrayList<T> implements List<T> {
         return false;
     }
 
-
     /**
      * Inserting element into DIYArrayList at index.<br>
      * Shifts all elements after inserted
@@ -77,6 +76,18 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         return false;
+    }
+
+    /**
+     * Replace element by index
+     *
+     * @param index   index of element
+     * @param element element for replace
+     * @return replaced T element
+     */
+    @Override
+    public T set(int index, T element) {
+        return elements[index] = element;
     }
 
     /**
@@ -121,18 +132,6 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public T get(int index) {
         return elements[index];
-    }
-
-    /**
-     * Replace element by index
-     *
-     * @param index   index of element
-     * @param element element for replace
-     * @return replaced T element
-     */
-    @Override
-    public T set(int index, T element) {
-        return elements[index] = element;
     }
 
     /**
@@ -198,6 +197,7 @@ public class DIYArrayList<T> implements List<T> {
     // endregion
 
     // region Not implemented methods
+    @SuppressWarnings("unchecked")
     @Override
     public Object[] toArray() {
         return new UnsupportedOperationException[]{new UnsupportedOperationException()};
@@ -228,6 +228,7 @@ public class DIYArrayList<T> implements List<T> {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Iterator<T> iterator() {
         return (Iterator<T>) new UnsupportedOperationException();
@@ -243,16 +244,19 @@ public class DIYArrayList<T> implements List<T> {
         return Integer.valueOf(String.valueOf(new UnsupportedOperationException()));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ListIterator<T> listIterator() {
         return (ListIterator<T>) new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ListIterator<T> listIterator(int index) {
         return (ListIterator<T>) new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return (List<T>) new UnsupportedOperationException();

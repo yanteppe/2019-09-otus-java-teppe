@@ -13,8 +13,13 @@ public class DIYArrayList<T> implements List<T> {
     private T[] elements;
     private int elementIndex = 0;
 
+    // TODO: подумать над "Unchecked cast: 'java.lang.Object[]' to 'T[]'" во свем классе...
     public DIYArrayList() {
-        elements = (T[]) new Object[0];
+        try {
+            elements = (T[]) new Object[0];
+        } catch (ClassCastException exception) {
+            exception.printStackTrace();
+        }
     }
 
     // region Implemented methods
@@ -68,11 +73,15 @@ public class DIYArrayList<T> implements List<T> {
         }
     }
 
+    // TODO: не реализован, реализовать позже
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends T> c) throws UnsupportedOperationException {
+//        T[] temporary = (T[]) new Object[elements.length + c.size()];
+//        System.arraycopy(elements, 0, temporary, 0, elements.length);
         return false;
     }
 
+    // TODO: не реализован, реализовать позже
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         return false;
@@ -172,6 +181,105 @@ public class DIYArrayList<T> implements List<T> {
         return false;
     }
 
+    /**
+     * Iterating collection elements
+     *
+     * @return Iterator
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+
+            /**
+             * Checks if the collection contains the next element or not
+             *
+             * @return boolean
+             */
+            @Override
+            public boolean hasNext() {
+                return elementIndex < elements.length;
+            }
+
+            /**
+             * Returns the next element the collection<br>
+             * If there is no next item in the collection, returns null
+             *
+             * @return element of collection or null;
+             */
+            @Override
+            public T next() {
+                if (hasNext()) {
+                    return elements[elementIndex++];
+                } else return null; // TODO: подумать правильно ли возвращать null...
+            }
+        };
+    }
+
+    /**
+     * Returns a list iterator over the elements in this list (in proper
+     * sequence).
+     *
+     * @return a list iterator over the elements in this list (in proper
+     * sequence)
+     */
+    @Override
+    public ListIterator<T> listIterator() { // TODO: позже добавить JavaDoc для методов...
+        return new ListIterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return iterator().hasNext();
+            }
+
+            @Override
+            public T next() {
+                return iterator().next();
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return elementIndex > elements.length;
+            }
+
+            @Override
+            public T previous() {
+                return elements[elementIndex--];
+            }
+
+            @Override
+            public int nextIndex() {
+                return elementIndex++;
+            }
+
+            @Override
+            public int previousIndex() {
+                return elementIndex--;
+            }
+
+            @Override
+            public void remove() throws UnsupportedOperationException {
+            }
+
+            @Override
+            public void set(T t) throws UnsupportedOperationException {
+            }
+
+            @Override
+            public void add(T t) throws UnsupportedOperationException {
+            }
+        };
+    }
+
+    /**
+     * Returns an array of elements in current collection.<br>
+     * Required to use Collections.sort (...)
+     *
+     * @return array of elements collections
+     */
+    @Override
+    public Object[] toArray() {
+        return elements;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -197,70 +305,49 @@ public class DIYArrayList<T> implements List<T> {
     // endregion
 
     // region Not implemented methods
-    @SuppressWarnings("unchecked")
     @Override
-    public Object[] toArray() {
-        return new UnsupportedOperationException[]{new UnsupportedOperationException()};
-    }
-
-    @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public <T1> T1[] toArray(T1[] a) throws UnsupportedOperationException {
         return null;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
     }
 
     @Override
-    public boolean remove(Object object) {
+    public boolean remove(Object object) throws UnsupportedOperationException {
         return false;
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Iterator<T> iterator() {
-        return (Iterator<T>) new UnsupportedOperationException();
+    public int indexOf(Object o) throws UnsupportedOperationException {
+        return 0;
     }
 
     @Override
-    public int indexOf(Object o) {
-        return Integer.valueOf(String.valueOf(new UnsupportedOperationException()));
+    public int lastIndexOf(Object o) throws UnsupportedOperationException {
+        return 0;
     }
 
     @Override
-    public int lastIndexOf(Object o) {
-        return Integer.valueOf(String.valueOf(new UnsupportedOperationException()));
+    public ListIterator<T> listIterator(int index) throws UnsupportedOperationException {
+        return null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ListIterator<T> listIterator() {
-        return (ListIterator<T>) new UnsupportedOperationException();
+    public List<T> subList(int fromIndex, int toIndex) throws UnsupportedOperationException {
+        return null;
     }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public ListIterator<T> listIterator(int index) {
-        return (ListIterator<T>) new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<T> subList(int fromIndex, int toIndex) {
-        return (List<T>) new UnsupportedOperationException();
-    }
-
     // endregion
 }

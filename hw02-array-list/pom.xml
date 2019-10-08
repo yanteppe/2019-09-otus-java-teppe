@@ -8,8 +8,10 @@
         <groupId>ru.otus</groupId>
         <version>2019-09-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>hw02-array-list</artifactId>
+    <name>hw02-array-list</name>
 
     <dependencies>
         <dependency>

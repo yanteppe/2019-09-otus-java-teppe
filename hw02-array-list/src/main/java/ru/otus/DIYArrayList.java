@@ -187,7 +187,9 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public boolean contains(Object object) {
         for (T element : elements) {
-            if (element.equals(object)) return true;
+            if (element.equals(object)) {
+                return true;
+            }
         }
         return false;
     }
@@ -266,14 +268,17 @@ public class DIYArrayList<T> implements List<T> {
                 return elementIndex--;
             }
 
+            @Deprecated
             @Override
             public void remove() throws UnsupportedOperationException {
             }
 
+            @Deprecated
             @Override
             public void set(T t) throws UnsupportedOperationException {
             }
 
+            @Deprecated
             @Override
             public void add(T t) throws UnsupportedOperationException {
             }
@@ -316,11 +321,13 @@ public class DIYArrayList<T> implements List<T> {
     // endregion
 
     // region Not implemented methods
+    @Deprecated
     @Override
     public <T1> T1[] toArray(T1[] a) throws UnsupportedOperationException {
         return null;
     }
 
+    @Deprecated
     @Override
     public boolean containsAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
@@ -331,36 +338,43 @@ public class DIYArrayList<T> implements List<T> {
         return false;
     }
 
+    @Deprecated
     @Override
     public boolean addAll(int index, Collection<? extends T> c) throws UnsupportedOperationException {
         return false;
     }
 
+    @Deprecated
     @Override
     public boolean removeAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
     }
 
+    @Deprecated
     @Override
     public boolean retainAll(Collection<?> c) throws UnsupportedOperationException {
         return false;
     }
 
+    @Deprecated
     @Override
     public int indexOf(Object o) throws UnsupportedOperationException {
         return 0;
     }
 
+    @Deprecated
     @Override
     public int lastIndexOf(Object o) throws UnsupportedOperationException {
         return 0;
     }
 
+    @Deprecated
     @Override
     public ListIterator<T> listIterator(int index) throws UnsupportedOperationException {
         return null;
     }
 
+    @Deprecated
     @Override
     public List<T> subList(int fromIndex, int toIndex) throws UnsupportedOperationException {
         return null;

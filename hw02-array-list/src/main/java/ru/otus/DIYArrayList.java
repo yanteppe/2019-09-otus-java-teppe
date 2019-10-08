@@ -8,12 +8,12 @@ import java.util.*;
  *
  * @param <T> Parameterized data type
  */
+// TODO: подумать над "Unchecked cast: 'java.lang.Object[]' to 'T[]'" во всем классе...
 public class DIYArrayList<T> implements List<T> {
-    private final int DEFAULT_SIZE = 10;
+    // private final int DEFAULT_SIZE = 10;
     private T[] elements;
     private int elementIndex = 0;
 
-    // TODO: подумать над "Unchecked cast: 'java.lang.Object[]' to 'T[]'" во свем классе...
     public DIYArrayList() {
         try {
             elements = (T[]) new Object[0];
@@ -73,18 +73,28 @@ public class DIYArrayList<T> implements List<T> {
         }
     }
 
-    // TODO: не реализован, реализовать позже
+    /**
+     * Adds a new list to the end of the list.
+     *
+     * @param c list to add
+     * @return new list
+     */
     @Override
-    public boolean addAll(Collection<? extends T> c) throws UnsupportedOperationException {
-//        T[] temporary = (T[]) new Object[elements.length + c.size()];
-//        System.arraycopy(elements, 0, temporary, 0, elements.length);
-        return false;
-    }
-
-    // TODO: не реализован, реализовать позже
-    @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return false;
+    public boolean addAll(Collection<? extends T> c) {
+        T[] temporary = elements;
+        try {
+            elements = (T[]) new Object[temporary.length + c.size()];
+        } catch (ClassCastException exception) {
+            exception.printStackTrace();
+        }
+        System.arraycopy(temporary, 0, elements, 0, temporary.length);
+        System.arraycopy(c.toArray(), 0, elements, temporary.length, c.size());
+        // Check addAll is successful
+        int countAddedElements = 0;
+        for (T element : c) {
+            if (Arrays.toString(elements).contains(element.toString())) countAddedElements++;
+        }
+        return countAddedElements == c.size();
     }
 
     /**
@@ -317,6 +327,11 @@ public class DIYArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object object) throws UnsupportedOperationException {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) throws UnsupportedOperationException {
         return false;
     }
 

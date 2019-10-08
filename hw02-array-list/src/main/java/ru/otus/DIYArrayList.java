@@ -8,7 +8,7 @@ import java.util.*;
  *
  * @param <T> Parameterized data type
  */
-// TODO: подумать над "Unchecked cast: 'java.lang.Object[]' to 'T[]'" во всем классе...
+// TODO: подумать над "Unchecked cast: java.lang.Object[] to T[]" во всем классе. Подавлять через @SuppressWarnings() ?
 public class DIYArrayList<T> implements List<T> {
     // private final int DEFAULT_SIZE = 10;
     private T[] elements;
@@ -74,10 +74,11 @@ public class DIYArrayList<T> implements List<T> {
     }
 
     /**
-     * Adds a new list to the end of the list.
+     * Adds a new list to the end of the list.<br>
+     * If addAll is successful return true, else - false
      *
      * @param c list to add
-     * @return new list
+     * @return boolean
      */
     @Override
     public boolean addAll(Collection<? extends T> c) {
@@ -233,7 +234,7 @@ public class DIYArrayList<T> implements List<T> {
      * sequence)
      */
     @Override
-    public ListIterator<T> listIterator() { // TODO: позже добавить JavaDoc для методов...
+    public ListIterator<T> listIterator() {
         return new ListIterator<T>() {
             @Override
             public boolean hasNext() {

@@ -9,12 +9,11 @@ import java.util.*;
  * @param <T> Parameterized data type
  */
 public class DIYArrayList<T> implements List<T> {
-    private final int DEFAULT_CAPACITY = 10;
     private T[] array;
     private int idx = 0;
 
     public DIYArrayList() {
-        array = (T[]) new Object[DEFAULT_CAPACITY];
+        array = (T[]) new Object[10];
     }
 
     // region Implemented methods
@@ -279,17 +278,19 @@ public class DIYArrayList<T> implements List<T> {
 
             @Deprecated
             @Override
-            public void remove() throws UnsupportedOperationException {
+            public void remove() {
+                throw new UnsupportedOperationException();
             }
 
             @Deprecated
             @Override
-            public void set(T t) throws UnsupportedOperationException {
+            public void set(T t) {
             }
 
             @Deprecated
             @Override
-            public void add(T t) throws UnsupportedOperationException {
+            public void add(T t) {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -334,7 +335,6 @@ public class DIYArrayList<T> implements List<T> {
     public <T1> T1[] toArray(T1[] a) {
         throw new UnsupportedOperationException();
     }
-
 
     @Deprecated
     @Override

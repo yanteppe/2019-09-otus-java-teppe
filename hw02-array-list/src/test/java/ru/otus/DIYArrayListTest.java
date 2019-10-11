@@ -25,10 +25,10 @@ public class DIYArrayListTest {
     public void preconditions() {
         stringsList = Arrays.asList(
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-                "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N", "M");
+                "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N", "M", "Z");
         integersList = Arrays.asList(
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13);
+                24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 25);
     }
 
     @AfterEach()
@@ -41,7 +41,9 @@ public class DIYArrayListTest {
     @DisplayName("Test method: size()")
     public void testSizeMethod() {
         List actualList = generateTestList(stringsList);
-        int expectedSize = 24;
+        int expectedSize = 25;
+        System.out.println("actual list: " + actualList.toString());
+        System.out.println("actual list size: " + actualList.size());
         assertEquals(expectedSize, actualList.size(),
                 String.format("List 'stringsList' size is: %s, but expected: %s", actualList.size(), expectedSize));
     }
@@ -50,14 +52,18 @@ public class DIYArrayListTest {
     @DisplayName("Test method: add() - Strings")
     public void testAddMethodWithStrings() {
         List actualList = generateTestList(stringsList);
-        assertEquals(stringsList, actualList, "List 'stringsList' not equal 'actualList' list");
+        System.out.println("expected list: " + stringsList.toString());
+        System.out.println("actual list:   " + actualList.toString());
+        assertArrayEquals(stringsList.toArray(), actualList.toArray(), "List 'stringsList' not equal 'actualList' list");
     }
 
     @Test()
     @DisplayName("Test method: add() - Int")
     public void testAddMethodWithInt() {
         List actualList = generateTestList(integersList);
-        assertEquals(integersList, actualList, "List 'integersList' not equal 'actualList' list");
+        System.out.println("expected list: " + integersList.toString());
+        System.out.println("actual list:   " + actualList.toString());
+        assertArrayEquals(integersList.toArray(), actualList.toArray(), "List 'integersList' not equal 'actualList' list");
     }
 
     @Test()
@@ -76,6 +82,7 @@ public class DIYArrayListTest {
         List<Object> actualList = generateTestList(stringsList);
         List<String> newList = Arrays.asList("test1", "test2", "test3");
         actualList.addAll(newList);
+        System.out.println("actual list: " + actualList.toString());
         assertTrue(actualList.contains(newList.get(0)), "List 'stringsList' does not contain an element under index 0 from list 'newList'");
         assertTrue(actualList.contains(newList.get(1)), "List 'stringsList' does not contain an element under index 1 from list 'newList'");
         assertTrue(actualList.contains(newList.get(2)), "List 'stringsList' does not contain an element under index 2 from list 'newList'");
@@ -107,9 +114,9 @@ public class DIYArrayListTest {
     @DisplayName("Test method: get(int index)")
     public void testGetMethod() {
         List actualList = generateTestList(stringsList);
-        String expectedElement = "N";
-        assertEquals(expectedElement, actualList.get(22),
-                String.format("Actual element: '%s', but expected: '%s'", actualList.get(22), expectedElement));
+        String expectedElement = "C";
+        assertEquals(expectedElement, actualList.get(2),
+                String.format("Actual element: '%s', but expected: '%s'", actualList.get(2), expectedElement));
     }
 
     @Test()
@@ -171,10 +178,10 @@ public class DIYArrayListTest {
         List actualIntegersList = generateTestList(integersList);
         List<String> expectedStringsList = Arrays.asList(
                 "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-                "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X");
+                "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Z");
         List<Integer> expectedIntegersList = Arrays.asList(
                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-                13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24);
+                13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25);
         Collections.sort(actualStringsList);
         Collections.sort(actualIntegersList);
         assertArrayEquals(expectedStringsList.toArray(), actualStringsList.toArray(), "List 'actualStringsList' not equals 'expectedStringsList', sort is failed");

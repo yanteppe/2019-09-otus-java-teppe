@@ -19,11 +19,11 @@ public class DIYArrayList<T> implements List<T> {
     // region Implemented methods
     @Override
     public int size() {
-        return array.length;
+        return idx;
     }
 
     /**
-     * Add element in DIYArrayList at last index
+     * Add element by last index
      *
      * @param element T element to add
      */
@@ -38,38 +38,6 @@ public class DIYArrayList<T> implements List<T> {
     }
 
     /**
-     * Check array capacity
-     *
-     * @param someArray array
-     * @return boolean
-     */
-    private boolean checkArrayCapacity(T[] someArray) {
-        return someArray.length == idx;
-    }
-
-    /**
-     * Increase array size<br>
-     * Formula of Increase array: (array.length * 3) / 2 + 1
-     */
-    private void increaseArraySize() {
-        T[] tempArr = array;
-        array = (T[]) new Object[(tempArr.length * 3) / 2 + 1];
-        System.arraycopy(tempArr, 0, array, 0, tempArr.length);
-    }
-
-    /**
-     * Trim an array - remove null elements
-     *
-     * @param someArray - array with null elements
-     */
-    // Проблема, надо отчистить как-то массив от null после вставки элемента/ов,
-    // но тогда при след. вставке массив нужно снова копировать...
-    private void trimArray(T[] someArray) {
-        array = Arrays.copyOf(someArray, idx);
-    }
-
-
-    /**
      * Inserting element into DIYArrayList at index.<br>
      * Shifts all array after inserted
      *
@@ -78,17 +46,32 @@ public class DIYArrayList<T> implements List<T> {
      */
     @Override
     public void add(int index, T element) {
-        T[] temporary = array;
-        array = (T[]) new Object[temporary.length + 1];
-        int j = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (i != 0) j++;
-            if (i == index) {          // If element index in list equals index new element - insert new element
-                array[i] = element;    // Insert new element
-                i++;                   // Shift after add element by insert in list
-            }
-            array[i] = temporary[j];
-        }
+        T[] tempArr = (T[]) new Object[array.length + 1];
+        System.arraycopy(array, 0, tempArr, 0, index);
+        tempArr[index] = element;
+        System.arraycopy(array, index, tempArr, index + 1, array.length - index);
+        array = tempArr;
+        idx++;
+    }
+
+    /**
+     * Check array capacity
+     *
+     * @param array array
+     * @return boolean
+     */
+    private boolean checkArrayCapacity(T[] array) {
+        return array.length == idx;
+    }
+
+    /**
+     * Increase array size<br>
+     * Formula of increase array: (array.length * 3) / 2 + 1
+     */
+    private void increaseArraySize() {
+        T[] tempArray = array;
+        array = (T[]) new Object[(tempArray.length * 3) / 2 + 1];
+        System.arraycopy(tempArray, 0, array, 0, tempArray.length);
     }
 
     /**
@@ -101,15 +84,13 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public boolean addAll(Collection<? extends T> c) {
         T[] temporary = array;
-        array = (T[]) new Object[temporary.length + c.size()];
-        System.arraycopy(temporary, 0, array, 0, temporary.length);
-        System.arraycopy(c.toArray(), 0, array, temporary.length, c.size());
-        // Check addAll is successful
-        int countAddedElements = 0;
-        for (T element : c) {
-            if (Arrays.toString(array).contains(element.toString())) countAddedElements++;
+        if (c.size() + idx > array.length) {
+            array = (T[]) new Object[temporary.length + c.size()];
         }
-        return countAddedElements == c.size();
+        System.arraycopy(temporary, 0, array, 0, temporary.length);
+        System.arraycopy(c.toArray(), 0, array, idx, c.size());
+        idx = idx + c.size();
+        return idx + c.size() == idx + c.size();
     }
 
     /**
@@ -150,6 +131,7 @@ public class DIYArrayList<T> implements List<T> {
             }
             array[i] = temp[j]; // New array after removing element
         }
+        --idx;
         return removedElement;
     }
 
@@ -170,6 +152,7 @@ public class DIYArrayList<T> implements List<T> {
     @Override
     public void clear() {
         array = (T[]) new Object[0];
+        idx = array.length;
     }
 
     /**
@@ -231,7 +214,7 @@ public class DIYArrayList<T> implements List<T> {
             public T next() {
                 if (hasNext()) {
                     return array[idx++];
-                } else return null; // TODO: подумать правильно ли возвращать null...
+                } else return null;
             }
         };
     }

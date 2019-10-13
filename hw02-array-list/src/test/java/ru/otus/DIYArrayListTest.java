@@ -71,9 +71,9 @@ public class DIYArrayListTest {
     public void testAddMethodWithIndex() {
         List<Object> actualList = generateTestList(stringsList);
         String expectedResult = "TEST";
-        actualList.add(3, expectedResult);
-        assertEquals(expectedResult, actualList.get(3), String.format("List 'stringsList' by index 3 not contains value '%s'", expectedResult));
-        assertEquals(actualList.size(), generateTestList(stringsList).size() + 1, "The 'stringsList' list did not increase after inserting a new item");
+        actualList.add(25, expectedResult);
+        assertEquals(expectedResult, actualList.get(25), String.format("List 'stringsList' by index 3 not contains value '%s'", expectedResult));
+        assertEquals(generateTestList(stringsList).size() + 1, actualList.size(), "The 'stringsList' list did not increase after inserting a new item");
     }
 
     @Test()
@@ -105,7 +105,7 @@ public class DIYArrayListTest {
         Object removedElement = actualList.get(6);
         actualList.remove(6);
         assertTrue(!actualList.contains(removedElement), "List 'stringsList' contains removed element, expected: not contains");
-        assertEquals(actualList.size(), generateTestList(stringsList).size() - 1,
+        assertEquals(generateTestList(stringsList).size() - 1, actualList.size(),
                 String.format("List 'stringsList' size is: %s, but expected: %s, " +
                         "the list should be reduced after removing the element", actualList.size(), actualList.size() - 1));
     }

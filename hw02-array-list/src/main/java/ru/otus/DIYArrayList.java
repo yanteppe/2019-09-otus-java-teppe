@@ -113,24 +113,14 @@ public class DIYArrayList<T> implements List<T> {
      */
     @Override
     public T remove(int index) {
-        // Create new array with new size
         T[] temp = array;
-        array = (T[]) new Object[array.length - 1];
-        // Filling array after deleting element
-        T removedElement = null;
-        int j = 0;
-        for (int i = 0; i < array.length; i++) {
-            if (index > array.length) { // If index out of bound of list
-                array = temp;
-                throw new IndexOutOfBoundsException(String.format("Index %s out of bounds for length %s", index, array.length));
-            }
-            if (i != 0) j++;
-            if (i == index) {
-                removedElement = array[i];
-                j++; // Shift after deleted element (skip deleted element index)
-            }
-            array[i] = temp[j]; // New array after removing element
+        T removedElement = array[index];
+        if (array.length - idx > 10) {
+            array = (T[]) new Object[idx - 1];
+        } else {
+            array = (T[]) new Object[array.length - 1];
         }
+        System.arraycopy(temp, index + 1, array, index, array.length - 1 - index );
         --idx;
         return removedElement;
     }

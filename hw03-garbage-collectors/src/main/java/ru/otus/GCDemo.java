@@ -9,10 +9,7 @@ import javax.management.ObjectName;
 import javax.management.openmbean.CompositeData;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /*
 О формате логов
@@ -49,30 +46,11 @@ http://openjdk.java.net/jeps/158
 
 public class GCDemo {
     private static long totalTime = 0;
-    // region G1
-    static Map<String, String> g1Stats = new HashMap<>();
-    private static int youngCount = 0;
-    private static int oldCount = 0;
-    private static String g1Minor;
-    private static String g1Major;
-    private static long g1MinorTotalDuration = 0;
-    private static long g1MajorTotalDuration = 0;
-    // endregion
-    // region Parallel Collector
-    static Map<String, String> psStats = new HashMap<>();
-    private static int scavengeCount = 0;
-    private static int markSweepCount = 0;
-    private static String psMinor;
-    private static String psMajor;
-    private static long psMinorTotalDuration = 0;
-    private static long psMajorTotalDuration = 0;
-    // endregion
 
     public static void main(String... args) throws Exception {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
         switchOnMonitoring();
-        long beginTime = System.currentTimeMillis();
-        int size = 5 * 1000 * 1000;
+        int size = 1_000_000;
         int loopCounter = 1000;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("ru.otus:type=Benchmark");
@@ -80,50 +58,11 @@ public class GCDemo {
         mbs.registerMBean(mbean, name);
         mbean.setSize(size);
         mbean.run();
-        System.out.println("time:" + (System.currentTimeMillis() - beginTime) / 1000);
 
-        totalTime = (System.currentTimeMillis() - beginTime) / 1000;
-        // region G1 Collector
-        try {
-            long g1MinorTimeSec = TimeUnit.MILLISECONDS.toSeconds(g1MinorTotalDuration);
-            g1Stats.put("young", "action:" + g1Minor + ", total actions: " + String.valueOf(youngCount) +
-                    ", minor total time (Sec):" + g1MinorTimeSec + ", action average time:" + g1MinorTotalDuration / youngCount + " ms");
-
-            long g1MajorTimeSec = TimeUnit.MILLISECONDS.toSeconds(g1MajorTotalDuration);
-            g1Stats.put("old", "action:" + g1Major + ", total actions: " + String.valueOf(oldCount) +
-                    ", major total time (Sec):" + g1MajorTimeSec + ", action average time:" + g1MajorTotalDuration / oldCount + " ms");
-            g1Stats.put("total time", String.valueOf(totalTime));
-        } catch (ArithmeticException exception) {
-            System.out.println("skip divide by zero");
-        }
-        // print stats
-        System.out.println("Garbage First (G1)");
-        System.out.println("Young Generation: " + g1Stats.get("young"));
-        System.out.println("Old Generation: " + g1Stats.get("old"));
-        System.out.println("Total time: " + g1Stats.get("total time"));
-        // endregion
-
-        // region Parallel Collector
-        try {
-
-            long psMinorTimeSec = TimeUnit.MILLISECONDS.toSeconds(psMinorTotalDuration);
-            psStats.put("scavenge", "action:" + psMinor + ", total actions: " + String.valueOf(scavengeCount) +
-                    ", minor total time (Sec):" + psMinorTimeSec + ", action average time:" + psMinorTotalDuration / scavengeCount + " ms");
-
-            long psMajorTimeSec = TimeUnit.MILLISECONDS.toSeconds(psMajorTotalDuration);
-            psStats.put("markSweep", "action:" + psMajor + ", total actions: " + String.valueOf(markSweepCount) +
-                    ", major total time (Sec):" + psMajorTimeSec + ", action average time:" + psMajorTotalDuration / markSweepCount + " ms");
-            psStats.put("total time", String.valueOf(totalTime));
-        } catch (ArithmeticException exception) {
-            System.out.println("skip divide by zero");
-        }
-        // Print stats
-        System.out.println("Parallel Collector");
-        System.out.println("PS Scavenge: " + psStats.get("scavenge"));
-        System.out.println("PS MarkSweep: " + psStats.get("markSweep"));
-        System.out.println("Total time: " + psStats.get("total time"));
-
-        // endregion
+        GarbageFirstGCStats.setG1Stats();
+        GarbageFirstGCStats.printStats();
+        ParallelGCStats.setParallelGCStats();
+        ParallelGCStats.printStats();
     }
 
     private static void switchOnMonitoring() {
@@ -137,33 +76,12 @@ public class GCDemo {
                     String gcName = info.getGcName();
                     String gcAction = info.getGcAction();
                     String gcCause = info.getGcCause();
-                    long startTime = info.getGcInfo().getStartTime();
                     long duration = info.getGcInfo().getDuration();
-                    System.out.println("start" + startTime + " Name:" + gcName + " | action:" + gcAction + " | gcCause:" + gcCause + " | action time:" + duration + " ms");
+                    //long startTime = info.getGcInfo().getStartTime();
+                    //System.out.println("Start: " + startTime + " | Name:" + gcName + " | action:" + gcAction + " | gcCause:" + gcCause + " | action time:" + duration + " ms");
 
-                    // region get G1 stats
-                    if (gcName.equals("G1 Young Generation")) {
-                        youngCount++;
-                        g1Minor = gcAction;
-                        g1MinorTotalDuration = g1MajorTotalDuration + duration;
-                    } else if (gcName.equals("G1 Old Generation")) {
-                        oldCount++;
-                        g1Major = gcAction;
-                        g1MajorTotalDuration = g1MajorTotalDuration + duration;
-                    }
-                    // endregion
-
-                    // region get Parallel Collector stats
-                    if (gcName.equals("PS Scavenge")) {
-                        scavengeCount++;
-                        psMinor = gcAction;
-                        psMinorTotalDuration = psMinorTotalDuration + duration;
-                    } else if (gcName.equals("PS MarkSweep")) {
-                        markSweepCount++;
-                        psMajor = gcAction;
-                        psMajorTotalDuration = psMajorTotalDuration + duration;
-                    }
-                    // endregion
+                    GarbageFirstGCStats.collectGarbageFirstGCStats(gcName, gcAction, duration);
+                    ParallelGCStats.collectParallelGCStats(gcName, gcAction, duration);
                 }
             };
             emitter.addNotificationListener(listener, null, null);

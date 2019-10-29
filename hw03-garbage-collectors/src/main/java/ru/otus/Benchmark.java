@@ -26,7 +26,8 @@ class Benchmark implements BenchmarkMBean {
 
     @Override
     public void setSize(int size) {
-        System.out.println("new size:" + size);
+        System.out.println("new size: " + size);
+        System.out.println();
         this.size = size;
     }
 

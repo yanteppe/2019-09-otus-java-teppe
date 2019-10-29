@@ -45,7 +45,6 @@ http://openjdk.java.net/jeps/158
 */
 
 public class GCDemo {
-    private static long totalTime = 0;
 
     public static void main(String... args) throws Exception {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());

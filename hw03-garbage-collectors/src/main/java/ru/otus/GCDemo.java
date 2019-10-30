@@ -45,11 +45,13 @@ http://openjdk.java.net/jeps/158
 */
 
 public class GCDemo {
+    private static String gcName;
+    private static String gcAction;
 
     public static void main(String... args) throws Exception {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
         switchOnMonitoring();
-        int size = 1_000_000;
+        int size = 3_000_000;
         int loopCounter = 1000;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("ru.otus:type=Benchmark");
@@ -58,10 +60,13 @@ public class GCDemo {
         mbean.setSize(size);
         mbean.run();
 
-        GarbageFirstGCStats.setG1Stats();
-        GarbageFirstGCStats.printStats();
-        ParallelGCStats.setParallelGCStats();
-        ParallelGCStats.printStats();
+        if (gcName.contains("G1")) {
+            GarbageFirstGCStats.setG1Stats();
+            GarbageFirstGCStats.printStats();
+        } else {
+            ParallelGCStats.setParallelGCStats();
+            ParallelGCStats.printStats();
+        }
     }
 
     private static void switchOnMonitoring() {
@@ -72,10 +77,10 @@ public class GCDemo {
             NotificationListener listener = (notification, handback) -> {
                 if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
                     GarbageCollectionNotificationInfo info = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
-                    String gcName = info.getGcName();
-                    String gcAction = info.getGcAction();
-                    String gcCause = info.getGcCause();
+                    gcName = info.getGcName();
+                    gcAction = info.getGcAction();
                     long duration = info.getGcInfo().getDuration();
+                    //String gcCause = info.getGcCause();
                     //long startTime = info.getGcInfo().getStartTime();
                     //System.out.println("Start: " + startTime + " | Name:" + gcName + " | action:" + gcAction + " | gcCause:" + gcCause + " | action time:" + duration + " ms");
 

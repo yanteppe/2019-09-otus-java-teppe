@@ -39,7 +39,7 @@ class GarbageFirstGCStats {
 
             g1Stats.put("total time", String.valueOf(totalTime));
         } catch (ArithmeticException exception) {
-            System.out.println();
+            System.out.print("");
         }
     }
 
@@ -48,7 +48,6 @@ class GarbageFirstGCStats {
     }
 
     static void printStats() {
-        System.out.println();
         System.out.println("Garbage First (G1)");
         System.out.println("Young Generation: " + g1Stats.get("young"));
         System.out.println("Old Generation: " + g1Stats.get("old"));

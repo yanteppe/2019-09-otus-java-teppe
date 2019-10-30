@@ -59,7 +59,6 @@ public class GCDemo {
         mbs.registerMBean(mbean, name);
         mbean.setSize(size);
         mbean.run();
-
         if (gcName.contains("G1")) {
             GarbageFirstGCStats.setG1Stats();
             GarbageFirstGCStats.printStats();
@@ -81,8 +80,8 @@ public class GCDemo {
                     gcAction = info.getGcAction();
                     long duration = info.getGcInfo().getDuration();
                     //System.out.println("Start: " + info.getGcInfo().getStartTime() + " | Name:" + gcName + " | action:" + gcAction + " | gcCause:" + info.getGcCause() + " | action time:" + duration + " ms");
-                    GarbageFirstGCStats.collectGarbageFirstGCStats(gcName, gcAction, duration);
-                    ParallelGCStats.collectParallelGCStats(gcName, gcAction, duration);
+                    if (gcName.contains("G1")) GarbageFirstGCStats.collectGarbageFirstGCStats(gcName, gcAction, duration);
+                    else ParallelGCStats.collectParallelGCStats(gcName, gcAction, duration);
                 }
             };
             emitter.addNotificationListener(listener, null, null);

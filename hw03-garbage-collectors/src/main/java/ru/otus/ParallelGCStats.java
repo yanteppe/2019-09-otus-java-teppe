@@ -48,7 +48,6 @@ class ParallelGCStats {
     }
 
     static void printStats() {
-        System.out.println();
         System.out.println("Parallel Collector");
         System.out.println("PS Scavenge: " + psStats.get("scavenge"));
         System.out.println("PS MarkSweep: " + psStats.get("markSweep"));

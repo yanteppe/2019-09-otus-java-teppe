@@ -81,7 +81,6 @@ public class GCDemo {
                     gcAction = info.getGcAction();
                     long duration = info.getGcInfo().getDuration();
                     //System.out.println("Start: " + info.getGcInfo().getStartTime() + " | Name:" + gcName + " | action:" + gcAction + " | gcCause:" + info.getGcCause() + " | action time:" + duration + " ms");
-
                     GarbageFirstGCStats.collectGarbageFirstGCStats(gcName, gcAction, duration);
                     ParallelGCStats.collectParallelGCStats(gcName, gcAction, duration);
                 }

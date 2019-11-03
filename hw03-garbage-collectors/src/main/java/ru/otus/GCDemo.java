@@ -11,39 +11,18 @@ import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.util.List;
 
-/*
-О формате логов
-http://openjdk.java.net/jeps/158
--Xms512m
--Xmx512m
--Xlog:gc=debug:file=./logs/gc-%p-%t.log:tags,uptime,time,level:filecount=5,filesize=10m
--XX:+HeapDumpOnOutOfMemoryError
--XX:HeapDumpPath=./logs/dump
--XX:+UseG1GC
-*/
 
-/*
-1)
-    default, time: 83 sec (82 without Label_1)
-2)
-    -XX:MaxGCPauseMillis=100000, time: 82 sec //Sets a target for the maximum GC pause time.
-    -XX:GCPauseIntervalMills=
-3)
-    -XX:MaxGCPauseMillis=10, time: 91 sec
-4)
--Xms2048m
--Xmx2048m
-    time: 81 sec
-5)
--Xms5120m
--Xmx5120m
-    time: 80 sec
-5)
--Xms20480m
--Xmx20480m
-    time: 81 sec (72 without Label_1)
-*/
-
+/**
+ * Getting statistics from garbage collectors
+ * <br>
+ * GarbageFirst: -XX:+UseG1GC<br>
+ * ParallelGC:   -XX:+UseParallelGC<br>
+ * <br>
+ * actions: - the total number of operations of this type for the entire program cycle<br>
+ * minor time - how many seconds were spent on this type of assembly<br>
+ * action average time - average time of one assembly of this type<br>
+ * total time - the total time the collectors work
+ */
 public class GCDemo {
     private static String gcName;
     private static String gcAction;

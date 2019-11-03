@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Collection of statistics for the collector G1
+ */
 class GarbageFirstGCStats {
     private static Map<String, String> g1Stats = new HashMap<>();
     private static long beginTime = System.currentTimeMillis();

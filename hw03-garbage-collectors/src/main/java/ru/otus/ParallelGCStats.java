@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Collection of statistics for the collector ParallelGC
+ */
 class ParallelGCStats {
     private static Map<String, String> psStats = new HashMap<>();
     private static long beginTime = System.currentTimeMillis();

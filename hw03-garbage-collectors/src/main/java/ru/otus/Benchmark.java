@@ -1,5 +1,8 @@
 package ru.otus;
 
+/**
+ * Benchmark for checking garbage collectors
+ */
 class Benchmark implements BenchmarkMBean {
     private final int counter;
     private volatile int size = 0;
@@ -30,5 +33,4 @@ class Benchmark implements BenchmarkMBean {
         System.out.println();
         this.size = size;
     }
-
 }

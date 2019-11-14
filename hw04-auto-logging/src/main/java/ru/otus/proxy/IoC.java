@@ -15,10 +15,10 @@ class IoC {
     }
 
     static class Handler implements InvocationHandler {
-        private ICalc iCalc;
+        private Calc calc;
 
-        Handler(ICalc iCalc) {
-            this.iCalc = iCalc;
+        Handler(Calc calc) {
+            this.calc = calc;
         }
 
         @Override
@@ -26,7 +26,7 @@ class IoC {
             if (method.isAnnotationPresent(Log.class)) {
                 printLog(method, args);
             }
-            method.invoke(iCalc, args);
+            method.invoke(calc, args);
             return null;
         }
 

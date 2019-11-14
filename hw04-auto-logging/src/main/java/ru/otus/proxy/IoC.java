@@ -23,9 +23,15 @@ class IoC {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            System.out.println("Executed method: " + method.getName() + ", params: " + Arrays.toString(args));
+            if (method.isAnnotationPresent(Log.class)) {
+                printLog(method, args);
+            }
             method.invoke(iCalc, args);
             return null;
+        }
+
+        void printLog(Method method, Object[] args) {
+            System.out.println("Executed method: " + method.getName() + ", params: " + Arrays.toString(args));
         }
     }
 }

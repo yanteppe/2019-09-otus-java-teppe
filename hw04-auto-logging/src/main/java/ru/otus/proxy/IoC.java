@@ -21,19 +21,20 @@ class IoC {
 
     static class Handler implements InvocationHandler {
         private Calc calc;
-        Object[] args;
+        boolean annotationFlag = false;
 
         Handler(Calc calc) throws NoSuchMethodException {
             this.calc = calc;
-            args = calc.getClass().getMethod("sum", int.class, int.class).getParameters();
-            // Не могу найти способ для получения значений аргументов передаваемых в метод sum(x, y)
             if (calc.getClass().getMethod("sum", int.class, int.class).isAnnotationPresent(Log.class)) {
-                printLog(calc.getClass().getMethod("sum", int.class, int.class), args);
+                annotationFlag = true;
             }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (annotationFlag){
+                printLog(calc.getClass().getMethod("sum", int.class, int.class), args);
+            }
             method.invoke(calc, args);
             return this;
         }

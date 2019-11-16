@@ -4,30 +4,38 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.Objects;
 
 class IoC {
 
     static ICalc createClass() {
-        Handler handler = new Handler(new Calc());
+        Handler handler = null;
+        try {
+            handler = new Handler(new Calc());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         return (ICalc) Proxy.newProxyInstance(ICalc.class.getClassLoader(),
-                new Class[]{ICalc.class},
-                handler);
+                new Class[]{ICalc.class}, Objects.requireNonNull(handler));
     }
 
     static class Handler implements InvocationHandler {
         private Calc calc;
+        Object[] args;
 
-        Handler(Calc calc) {
+        Handler(Calc calc) throws NoSuchMethodException {
             this.calc = calc;
+            args = calc.getClass().getMethod("sum", int.class, int.class).getParameters();
+            // Не могу найти способ для получения значений аргументов передаваемых в метод sum(x, y)
+            if (calc.getClass().getMethod("sum", int.class, int.class).isAnnotationPresent(Log.class)) {
+                printLog(calc.getClass().getMethod("sum", int.class, int.class), args);
+            }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (method.isAnnotationPresent(Log.class)) {
-                printLog(method, args);
-            }
             method.invoke(calc, args);
-            return null;
+            return this;
         }
 
         void printLog(Method method, Object[] args) {

@@ -4,19 +4,19 @@ package ru.otus.atm;
  * Monetary unit
  */
 public abstract class Banknote {
-    private String banknoteName;
+    private String banknoteType;
     private int nominalValue;
 
     Banknote(int nominalValue) {
         this.nominalValue = nominalValue;
     }
 
-    public String getBanknoteName() {
-        return banknoteName;
+    public String getBanknoteType() {
+        return banknoteType;
     }
 
-    public void setBanknoteName(String banknoteName) {
-        this.banknoteName = banknoteName;
+    public void setBanknoteType(String banknoteType) {
+        this.banknoteType = banknoteType;
     }
 
     public int getNominalValue() {

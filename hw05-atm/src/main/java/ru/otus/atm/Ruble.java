@@ -4,16 +4,16 @@ public class Ruble extends Banknote {
 
     Ruble(int nominalValue) {
         super(nominalValue);
-        super.setBanknoteName("Ruble");
+        super.setBanknoteType("Ruble");
     }
 
     @Override
-    public void setBanknoteName(String banknoteName) {
-        super.setBanknoteName(banknoteName);
+    public void setBanknoteType(String banknoteType) {
+        super.setBanknoteType(banknoteType);
     }
 
     @Override
     public String toString() {
-        return "Banknote: " + super.getBanknoteName() + ", nominal = " + super.getNominalValue();
+        return "Banknote: " + super.getBanknoteType() + ", nominal = " + super.getNominalValue();
     }
 }

@@ -1,4 +1,6 @@
-package ru.otus.atm;
+package ru.otus.hw;
+
+import ru.otus.hw.nominals.RubleNominal;
 
 /**
  * Monetary unit
@@ -9,6 +11,9 @@ public abstract class Banknote {
 
     Banknote(int nominalValue) {
         this.nominalValue = nominalValue;
+    }
+
+    Banknote(RubleNominal next) {
     }
 
     public String getBanknoteType() {
@@ -22,8 +27,4 @@ public abstract class Banknote {
     public int getNominalValue() {
         return nominalValue;
     }
-
-//    public void setNominalValue(int nominalValue) {
-//        this.nominalValue = nominalValue;
-//    }
 }

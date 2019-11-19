@@ -1,10 +1,10 @@
-package ru.otus.atm;
+package ru.otus.hw;
 
-public class Ruble extends Banknote {
+public class Dollar extends Banknote {
 
-    Ruble(int nominalValue) {
+    Dollar(int nominalValue) {
         super(nominalValue);
-        super.setBanknoteType("Ruble");
+        super.setBanknoteType("Dollar");
     }
 
     @Override

@@ -1,8 +1,8 @@
 package ru.otus.hw;
 
 import ru.otus.hw.atm.ATM;
-import ru.otus.hw.nominals.DollarNominal;
-import ru.otus.hw.nominals.RubleNominal;
+import ru.otus.hw.banknotes.Dollar;
+import ru.otus.hw.banknotes.Ruble;
 
 /**
  * Simple ATM emulator demo
@@ -11,18 +11,23 @@ public class ATMDemo {
     public static void main(String[] args) {
         // Create ATM
         ATM atm = new ATM();
-        // Fold ruble banknotes in ATM
-        for (int i = 0; i < RubleNominal.values().length; i++) {
-            atm.acceptBanknote(new Ruble(RubleNominal.values()[i].getNominal()));
-            atm.acceptBanknote(new Ruble(RubleNominal.values()[i].getNominal()));
-            atm.acceptBanknote(new Ruble(RubleNominal.values()[i].getNominal()));
+        // Fold ruble banknotes in ATM: 5 banknotes of each face value
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < Ruble.values().length; j++) {
+                atm.acceptBanknote(Ruble.values()[j]);
+            }
         }
-        // Fold dollar banknotes in ATM
-        for (int i = 0; i < DollarNominal.values().length; i++) {
-            atm.acceptBanknote(new Dollar(DollarNominal.values()[i].getNominal()));
-            atm.acceptBanknote(new Dollar(DollarNominal.values()[i].getNominal()));
-            atm.acceptBanknote(new Dollar(DollarNominal.values()[i].getNominal()));
+        // Fold dollar banknotes in ATM: 5 banknotes of each face value
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < Dollar.values().length; j++) {
+                atm.acceptBanknote(Dollar.values()[j]);
+            }
         }
-        atm.printDisplayAccountState();
+        // Print account state
+        atm.printAccountState();
+
+        // Get banknotes
+        atm.getBanknotes(Ruble.TYPE, 184);
+        atm.getBanknotes(Dollar.TYPE, 184);
     }
 }

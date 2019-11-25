@@ -1,7 +1,7 @@
 package ru.otus.hw.banknotes;
 
 public enum Dollar implements Banknote {
-    TYPE("Dollar"),
+//    TYPE("Dollar"),
     DOLLAR_5(5),
     DOLLAR_10(10),
     DOLLAR_20(20),
@@ -18,14 +18,19 @@ public enum Dollar implements Banknote {
         this.type = type;
     }
 
-    @Override
-    public String getType() {
-        return type;
-    }
+//    @Override
+//    public String getType() {
+//        return type;
+//    }
 
     @Override
     public int getNominal() {
         return nominal;
+    }
+
+    @Override
+    public Dollar[] getNominals() {
+        return Dollar.values();
     }
 
     @Override

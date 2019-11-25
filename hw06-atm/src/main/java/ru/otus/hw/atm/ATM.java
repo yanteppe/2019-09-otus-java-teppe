@@ -4,6 +4,7 @@ import ru.otus.hw.banknotes.Banknote;
 import ru.otus.hw.banknotes.Dollar;
 import ru.otus.hw.banknotes.Ruble;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -31,14 +32,20 @@ public class ATM {
      * @param banknote monetary unit (dollar or ruble)
      * @param sum      desired sum
      */
-    public void getBanknotes(Banknote banknote, int sum) {
+    public void getBanknotes(String banknote, int sum) {
         if (!checkSum(banknote, sum)) {
             printATMMessage(String.format("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
-                    "\nРубли номиналы: %s. Доллары номиналы: %s.", Ruble.TYPE.toString(), Dollar.TYPE.toString()));
+                    "\nРубли номиналы: %s. Доллары номиналы: %s.", Arrays.toString(Ruble.values()), Arrays.toString(Dollar.values())));
         }
-        if (checkDesiredSumOnAccount(banknote, sum)) banknoteContainer.getOutBanknotes(banknote, sum);
-        else printATMMessage(String.format("\nОШИБКА: На счете '%s' недостаточно средств", banknote.getType()));
-        // TODO: продолжить - реализовать
+        if (checkDesiredSumOnAccount(banknote, sum)) {
+            banknoteContainer.collectBanknotes(banknote, sum);
+            System.out.println("\nBanknotes issued, "
+                    + banknote + ": "
+                    + banknoteContainer.getSumIssuedBanknotes() + " "
+                    + banknoteContainer.getBanknotesForIssue(banknote));
+        } else {
+            printATMMessage(String.format("ОШИБКА: На счете '%s' недостаточно средств", banknote));
+        }
     }
 
     /**
@@ -46,8 +53,8 @@ public class ATM {
      *
      * @param sum desired sum
      */
-    private boolean checkSum(Banknote banknote, int sum) {
-        if (banknote instanceof Ruble) {
+    private boolean checkSum(String banknote, int sum) {
+        if (banknote.equals("ruble")) {
             return sum % Ruble.RUB_50.getNominal() == 0;
         } else {
             return sum % Dollar.DOLLAR_5.getNominal() == 0;
@@ -60,8 +67,8 @@ public class ATM {
      * @param banknote monetary unit (dollar or ruble)
      * @param sum      desired sum
      */
-    private boolean checkDesiredSumOnAccount(Banknote banknote, int sum) {
-        if (banknote instanceof Ruble) {
+    private boolean checkDesiredSumOnAccount(String banknote, int sum) {
+        if (banknote.equals("ruble")) {
             return sum <= banknoteContainer.getRubleTotalData();
         } else {
             return sum <= banknoteContainer.getDollarTotalData();

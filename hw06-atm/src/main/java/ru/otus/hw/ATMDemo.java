@@ -12,13 +12,13 @@ public class ATMDemo {
         // Create ATM
         ATM atm = new ATM();
         // Fold ruble banknotes in ATM: 5 banknotes of each face value
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < Ruble.values().length; j++) {
                 atm.acceptBanknote(Ruble.values()[j]);
             }
         }
         // Fold dollar banknotes in ATM: 5 banknotes of each face value
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < Dollar.values().length; j++) {
                 atm.acceptBanknote(Dollar.values()[j]);
             }
@@ -26,8 +26,11 @@ public class ATMDemo {
         // Print account state
         atm.printAccountState();
 
-        // Get banknotes
-        atm.getBanknotes(Ruble.TYPE, 184);
-        atm.getBanknotes(Dollar.TYPE, 184);
+        // Get rubles
+//        atm.getBanknotes("ruble", 5650);
+//        atm.printAccountState();
+        // Get dollars
+        atm.getBanknotes("dollar", 500);
+        atm.printAccountState();
     }
 }

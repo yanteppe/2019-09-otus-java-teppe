@@ -12,7 +12,7 @@ public class ATMDemo {
         atm.acceptBanknotes(new Ruble(2000), 3);
         atm.acceptBanknotes(new Ruble(5000), 3);
         atm.displayAccountStatus();
-        atm.getBanknotes(1750);
+        atm.getBanknotes(850);
         atm.displayAccountStatus();
     }
 }

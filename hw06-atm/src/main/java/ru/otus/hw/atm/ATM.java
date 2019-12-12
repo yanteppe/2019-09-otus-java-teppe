@@ -46,8 +46,9 @@ public class ATM {
      * @param sum desired sum
      */
     private void checkDesiredSumInBanknoteContainer(int sum) {
-        if (sum > banknoteContainer.getBanknoteContainerTotalSum()) throw new NotEnoughBanknotesSumException("" +
-                "\nОШИБКА: Сумма банкнот в контейнере недостаточна\n");
+        int availableSum = banknoteContainer.getBanknoteContainerTotalSum();
+        if (sum > availableSum) throw new NotEnoughBanknotesSumException(
+                String.format("\nОШИБКА: Сумма банкнот в банкомате недостаточна, запрошено: %s, доступно: %s\n", sum, availableSum));
     }
 
     /**

@@ -1,11 +1,8 @@
 package ru.otus.hw.atm;
 
-import ru.otus.hw.Banknote;
+import ru.otus.hw.Ruble;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ATM banknote storage container
@@ -33,24 +30,29 @@ class BanknoteContainer {
         return sum;
     }
 
-    void foldBanknotes(Banknote banknote, int amount) {
-        if (banknote.getNominalValue() == 50) {
-            banknotes.put("50", rubCounter50 += amount);
-        }
-        if (banknote.getNominalValue() == 100) {
-            banknotes.put("100", rubCounter100 += amount);
-        }
-        if (banknote.getNominalValue() == 500) {
-            banknotes.put("500", rubCounter500 += amount);
-        }
-        if (banknote.getNominalValue() == 1000) {
-            banknotes.put("1000", rubCounter1000 += amount);
-        }
-        if (banknote.getNominalValue() == 2000) {
-            banknotes.put("2000", rubCounter2000 += amount);
-        }
-        if (banknote.getNominalValue() == 5000) {
-            banknotes.put("5000", rubCounter5000 += amount);
+    void foldBanknotes(Ruble ruble, int amount) {
+        switch (ruble) {
+            case RUB_50:
+                banknotes.put("50", rubCounter50 += amount);
+                break;
+            case RUB_100:
+                banknotes.put("100", rubCounter100 += amount);
+                break;
+            case RUB_200:
+                banknotes.put("200", rubCounter500 += amount);
+                break;
+            case RUB_500:
+                banknotes.put("500", rubCounter500 += amount);
+                break;
+            case RUB_1000:
+                banknotes.put("1000", rubCounter1000 += amount);
+                break;
+            case RUB_2000:
+                banknotes.put("2000", rubCounter1000 += amount);
+                break;
+            case RUB_5000:
+                banknotes.put("5000", rubCounter5000 += amount);
+                break;
         }
     }
 

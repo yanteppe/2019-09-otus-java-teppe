@@ -1,19 +1,21 @@
 package ru.otus.hw;
 
-public class Ruble extends Banknote {
+public enum Ruble {
+    RUB_50(50),
+    RUB_100(100),
+    RUB_200(200),
+    RUB_500(500),
+    RUB_1000(1000),
+    RUB_2000(2000),
+    RUB_5000(5000),;
 
-    public Ruble(int nominalValue) {
-        super(nominalValue);
-        super.setBanknoteType("Ruble");
+    int nominal;
+
+    Ruble(int nominal) {
+        this.nominal = nominal;
     }
 
-    @Override
-    public void setBanknoteType(String banknoteType) {
-        super.setBanknoteType(banknoteType);
-    }
-
-    @Override
-    public String toString() {
-        return "Banknote: " + super.getBanknoteType() + ", nominal = " + super.getNominalValue();
+    public int getNominal() {
+        return nominal;
     }
 }

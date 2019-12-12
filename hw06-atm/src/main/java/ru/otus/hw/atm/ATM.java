@@ -1,6 +1,6 @@
 package ru.otus.hw.atm;
 
-import ru.otus.hw.Banknote;
+import ru.otus.hw.Ruble;
 
 /**
  * ATM emulator class
@@ -12,9 +12,9 @@ public class ATM {
         banknoteContainer = new BanknoteContainer();
     }
 
-    public void acceptBanknotes(Banknote banknote, int amount) {
-        checkBanknoteOnZero(banknote.getNominalValue());
-        banknoteContainer.foldBanknotes(banknote, amount);
+    public void acceptBanknotes(Ruble ruble, int amount) {
+        checkBanknoteOnZero(ruble.getNominal());
+        banknoteContainer.foldBanknotes(ruble, amount);
     }
 
     public void getBanknotes(int sum) {

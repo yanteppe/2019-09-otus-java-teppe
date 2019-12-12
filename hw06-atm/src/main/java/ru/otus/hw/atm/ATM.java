@@ -57,7 +57,8 @@ public class ATM {
      * @param sum desired sum
      */
     private void checkNominal(int sum) {
-        if (sum % 50 != 0) throw new SumParityException(String.format("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
+        if (sum % 50 != 0)
+            throw new SumParityException(String.format("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
                     "\nНоминалы: %s\n", Arrays.toString(Ruble.values())));
     }
 

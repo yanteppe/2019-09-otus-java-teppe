@@ -1,8 +1,12 @@
 package ru.otus.hw.atm;
 
 import ru.otus.hw.Ruble;
+import ru.otus.hw.exception.NotEnoughBanknotesNominalException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ATM banknote storage container
@@ -12,6 +16,7 @@ class BanknoteContainer {
     private List<Integer> banknotesForIssue = new ArrayList<>();
     private int rubCounter50 = 0;
     private int rubCounter100 = 0;
+    private int rubCounter200 = 0;
     private int rubCounter500 = 0;
     private int rubCounter1000 = 0;
     private int rubCounter2000 = 0;
@@ -39,7 +44,7 @@ class BanknoteContainer {
                 banknotes.put("100", rubCounter100 += amount);
                 break;
             case RUB_200:
-                banknotes.put("200", rubCounter500 += amount);
+                banknotes.put("200", rubCounter200 += amount);
                 break;
             case RUB_500:
                 banknotes.put("500", rubCounter500 += amount);
@@ -48,7 +53,7 @@ class BanknoteContainer {
                 banknotes.put("1000", rubCounter1000 += amount);
                 break;
             case RUB_2000:
-                banknotes.put("2000", rubCounter1000 += amount);
+                banknotes.put("2000", rubCounter2000 += amount);
                 break;
             case RUB_5000:
                 banknotes.put("5000", rubCounter5000 += amount);
@@ -111,29 +116,17 @@ class BanknoteContainer {
     }
 
     private void displayNotEnoughBanknotesError(int nominal) {
-        throw new RuntimeException(String.format("ОШИБКА: Сумма не может быть выдана, недостаточно банкнот номиналом %s", nominal));
+        throw new NotEnoughBanknotesNominalException(String.format("ОШИБКА: Сумма не может быть выдана, недостаточно банкнот номиналом %s", nominal));
     }
 
-    int getContainerData() {
+    int getBanknoteContainerTotalSum() {
         int banknotesTotal = 0;
         for (String key : banknotes.keySet()) {
-            if (key.equals("50")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 50;
-            }
-            if (key.equals("100")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 100;
-            }
-            if (key.equals("500")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 500;
-            }
-            if (key.equals("1000")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 1000;
-            }
-            if (key.equals("2000")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 2000;
-            }
-            if (key.equals("5000")) {
-                banknotesTotal = banknotesTotal + banknotes.get(key) * 5000;
+            for (Ruble nominal : Ruble.values()) {
+                if (Integer.parseInt(key) == nominal.getNominal()) {
+                    banknotesTotal = banknotesTotal + banknotes.get(key) * nominal.getNominal();
+                    break;
+                }
             }
         }
         return banknotesTotal;

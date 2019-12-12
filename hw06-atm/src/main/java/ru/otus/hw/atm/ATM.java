@@ -1,6 +1,11 @@
 package ru.otus.hw.atm;
 
 import ru.otus.hw.Ruble;
+import ru.otus.hw.exception.NotEnoughBanknotesSumException;
+import ru.otus.hw.exception.SumParityException;
+import ru.otus.hw.exception.ZeroSumException;
+
+import java.util.Arrays;
 
 /**
  * ATM emulator class
@@ -13,13 +18,13 @@ public class ATM {
     }
 
     public void acceptBanknotes(Ruble ruble, int amount) {
-        checkBanknoteOnZero(ruble.getNominal());
+        checkDesiredSumOnZero(ruble.getNominal());
         banknoteContainer.foldBanknotes(ruble, amount);
     }
 
     public void getBanknotes(int sum) {
-        checkBanknoteOnZero(sum);
-        checkDesiredSumOnAccount(sum);
+        checkDesiredSumOnZero(sum);
+        checkDesiredSumInBanknoteContainer(sum);
         checkNominal(sum);
         String issuedBanknotes = String.valueOf(banknoteContainer.getBanknotesForIssue(sum));
         String issuedSum = String.valueOf(banknoteContainer.getIssuedSum());
@@ -31,17 +36,18 @@ public class ATM {
      *
      * @param nominal
      */
-    private void checkBanknoteOnZero(int nominal) {
-        if (nominal == 0) throw new RuntimeException("\nОШИБКА: Запрашиваемая сумма не может быть равна '0'\n");
+    private void checkDesiredSumOnZero(int nominal) {
+        if (nominal == 0) throw new ZeroSumException("\nОШИБКА: Запрашиваемая сумма не может быть равна 0\n");
     }
 
     /**
-     * Check the desired sum is on the account
+     * Check the desired sum in banknote container
      *
      * @param sum desired sum
      */
-    private void checkDesiredSumOnAccount(int sum) {
-        if (sum > banknoteContainer.getContainerData()) throw new RuntimeException("\nОШИБКА: На счете недостаточно средств\n");
+    private void checkDesiredSumInBanknoteContainer(int sum) {
+        if (sum > banknoteContainer.getBanknoteContainerTotalSum()) throw new NotEnoughBanknotesSumException("" +
+                "\nОШИБКА: Сумма банкнот в контейнере недостаточна\n");
     }
 
     /**
@@ -50,15 +56,15 @@ public class ATM {
      * @param sum desired sum
      */
     private void checkNominal(int sum) {
-        if (sum % 50 != 0) throw new RuntimeException("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
-                    "\nНоминалы: 50, 100, 500, 1000, 2000, 5000\n");
+        if (sum % 50 != 0) throw new SumParityException(String.format("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
+                    "\nНоминалы: %s\n", Arrays.toString(Ruble.values())));
     }
 
     /**
      * Display account status
      */
     public void displayAccountStatus() {
-        System.out.println("Account status: " + banknoteContainer.getContainerData() +
+        System.out.println("Account status: " + banknoteContainer.getBanknoteContainerTotalSum() +
                 ", banknotes: " + banknoteContainer.getBanknotes().toString());
     }
 

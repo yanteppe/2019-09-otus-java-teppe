@@ -34,7 +34,7 @@ public class ATM {
     /**
      * Check banknote value is not equal to zero
      *
-     * @param nominal
+     * @param nominal banknote nominal value
      */
     private void checkDesiredSumOnZero(int nominal) {
         if (nominal == 0) throw new ZeroSumException("\nОШИБКА: Запрашиваемая сумма не может быть равна 0\n");

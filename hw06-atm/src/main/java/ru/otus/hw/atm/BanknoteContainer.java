@@ -71,37 +71,37 @@ class BanknoteContainer {
             int nominal = 0;
             if (sum >= 5000) {
                 nominal = 5000;
-                if (rubCounter5000 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter5000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("5000", --rubCounter5000);
                 banknotesForIssue.add(nominal);
             }
             if (sum >= 2000 && sum < 5000) {
                 nominal = 2000;
-                if (rubCounter2000 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter2000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("2000", --rubCounter2000);
                 banknotesForIssue.add(nominal);
             }
             if (sum >= 1000 && sum < 2000) {
                 nominal = 1000;
-                if (rubCounter1000 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter1000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("1000", --rubCounter1000);
                 banknotesForIssue.add(nominal);
             }
             if (sum >= 500 && sum < 1000) {
                 nominal = 500;
-                if (rubCounter500 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter500 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("500", --rubCounter500);
                 banknotesForIssue.add(nominal);
             }
             if (sum >= 100 && sum < 500) {
                 nominal = 100;
-                if (rubCounter100 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter100 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("100", --rubCounter100);
                 banknotesForIssue.add(nominal);
             }
             if (sum >= 50 && sum < 100) {
                 nominal = 50;
-                if (rubCounter50 <= 0) displayNotEnoughBanknotesError(nominal);
+                if (rubCounter50 <= 0) displayNotEnoughBanknotesNominalError(nominal);
                 banknotes.put("50", --rubCounter50);
                 banknotesForIssue.add(nominal);
             }
@@ -115,10 +115,20 @@ class BanknoteContainer {
         }
     }
 
-    private void displayNotEnoughBanknotesError(int nominal) {
+    /**
+     * Display error of not enough banknotes nominal in banknote container
+     *
+     * @param nominal banknote nominal value
+     */
+    private void displayNotEnoughBanknotesNominalError(int nominal) {
         throw new NotEnoughBanknotesNominalException(String.format("ОШИБКА: Сумма не может быть выдана, недостаточно банкнот номиналом %s", nominal));
     }
 
+    /**
+     * Get total sum of banknotes in banknote container
+     *
+     * @return total sum of banknotes
+     */
     int getBanknoteContainerTotalSum() {
         int banknotesTotal = 0;
         for (String key : banknotes.keySet()) {

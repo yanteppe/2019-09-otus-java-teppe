@@ -10,18 +10,29 @@ import java.util.Arrays;
 /**
  * ATM emulator class
  */
-public class ATM {
+public class ATM implements IATM {
     private BanknoteContainer banknoteContainer;
 
     public ATM() {
         banknoteContainer = new BanknoteContainer();
     }
 
+    /**
+     * Accept the required number of banknotes
+     *
+     * @param ruble currency unit
+     * @param amount number of banknotes accepted
+     */
     public void acceptBanknotes(Ruble ruble, int amount) {
         checkDesiredSumOnZero(ruble.getNominal());
         banknoteContainer.foldBanknotes(ruble, amount);
     }
 
+    /**
+     * Get desired sum
+     *
+     * @param sum desired sum
+     */
     public void getBanknotes(int sum) {
         checkDesiredSumOnZero(sum);
         checkDesiredSumInBanknoteContainer(sum);
@@ -29,6 +40,21 @@ public class ATM {
         String issuedBanknotes = String.valueOf(banknoteContainer.getBanknotesForIssue(sum));
         String issuedSum = String.valueOf(banknoteContainer.getIssuedSum());
         displayIssuedBanknotes(issuedSum, issuedBanknotes);
+    }
+
+    /**
+     * Display account status
+     */
+    public void displayAccountStatus() {
+        System.out.println("Account status: " + banknoteContainer.getBanknoteContainerTotalSum() +
+                ", banknotes: " + banknoteContainer.getBanknotesContainer().toString());
+    }
+
+    /**
+     * Display issued banknotes
+     */
+    public void displayIssuedBanknotes(String issuedSum, String issuedBanknotes) {
+        System.out.println("ISSUED BY: " + issuedSum + ", banknotes: " + issuedBanknotes);
     }
 
     /**
@@ -60,21 +86,5 @@ public class ATM {
         if (sum % 50 != 0)
             throw new SumParityException(String.format("\nОШИБКА: Запрашиваемая сумма должна быть кратной номиналу банкнот. " +
                     "\nНоминалы: %s\n", Arrays.toString(Ruble.values())));
-    }
-
-    /**
-     * Display account status
-     */
-    public void displayAccountStatus() {
-        System.out.println("Account status: " + banknoteContainer.getBanknoteContainerTotalSum() +
-                ", banknotes: " + banknoteContainer.getBanknotes().toString());
-    }
-
-    /**
-     * Display issued banknotes
-     */
-    private void displayIssuedBanknotes(String issuedSum, String issuedBanknotes) {
-        System.out.println("ISSUED: " + issuedSum + ", banknotes: " + issuedBanknotes);
-
     }
 }

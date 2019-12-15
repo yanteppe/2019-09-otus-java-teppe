@@ -18,4 +18,16 @@ public enum Ruble {
     public int getNominal() {
         return nominal;
     }
+
+    public static int[] getNominals() {
+        return new int[]{
+                RUB_5000.getNominal(),
+                RUB_2000.getNominal(),
+                RUB_1000.getNominal(),
+                RUB_500.getNominal(),
+                RUB_200.getNominal(),
+                RUB_100.getNominal(),
+                RUB_50.getNominal()
+        };
+    }
 }

@@ -21,7 +21,7 @@ public class ATMDemo {
         atm.acceptBanknotes(Ruble.RUB_2000, 3);
         atm.acceptBanknotes(Ruble.RUB_5000, 3);
         atm.displayAccountStatus();
-        atm.getBanknotes(500000);
+        atm.getBanknotes(15400);
         atm.displayAccountStatus();
     }
 }

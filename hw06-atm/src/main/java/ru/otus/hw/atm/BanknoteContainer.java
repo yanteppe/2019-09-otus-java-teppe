@@ -3,16 +3,13 @@ package ru.otus.hw.atm;
 import ru.otus.hw.Ruble;
 import ru.otus.hw.exception.NotEnoughBanknotesNominalException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ATM banknote storage container
  */
 class BanknoteContainer {
-    private Map<String, Integer> banknotes = new HashMap<>();
+    private SortedMap<Integer, Integer> banknotesContainer = new TreeMap<>(Collections.reverseOrder());
     private List<Integer> banknotesForIssue = new ArrayList<>();
     private int rubCounter50 = 0;
     private int rubCounter100 = 0;
@@ -36,87 +33,94 @@ class BanknoteContainer {
     }
 
     void foldBanknotes(Ruble ruble, int amount) {
-        switch (ruble) {
-            case RUB_50:
-                banknotes.put("50", rubCounter50 += amount);
-                break;
-            case RUB_100:
-                banknotes.put("100", rubCounter100 += amount);
-                break;
-            case RUB_200:
-                banknotes.put("200", rubCounter200 += amount);
-                break;
-            case RUB_500:
-                banknotes.put("500", rubCounter500 += amount);
-                break;
-            case RUB_1000:
-                banknotes.put("1000", rubCounter1000 += amount);
-                break;
-            case RUB_2000:
-                banknotes.put("2000", rubCounter2000 += amount);
-                break;
-            case RUB_5000:
-                banknotes.put("5000", rubCounter5000 += amount);
-                break;
-        }
+        banknotesContainer.put(ruble.getNominal(), amount);
     }
 
     /**
-     * Get banknotes by sum
+     * Get sum by banknotes
      *
-     * @param sum desired sum of banknotes
+     * @param sum desired sum
      */
     private void selectBanknotes(int sum) {
-        for (String banknoteNominal : banknotes.keySet()) {
-            int nominal = 0;
-            if (sum >= 5000) {
-                nominal = 5000;
-                if (rubCounter5000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("5000", --rubCounter5000);
-                banknotesForIssue.add(nominal);
+        for (int i = 0; i < Ruble.getNominals().length; i++) {
+            if (sum / Ruble.getNominals()[i] >= 1) {
+                int nominal = sum - (sum - Ruble.getNominals()[i]);
+                sum = sum - nominal;
+                for (int j = 0; j < Ruble.getNominals().length; j++) {
+                    if (nominal == Ruble.getNominals()[j]) {
+                        Integer banknoteCounter = banknotesContainer.get(Ruble.getNominals()[i]);
+                        banknotesContainer.put(Ruble.getNominals()[i], --banknoteCounter);
+                        banknotesForIssue.add(Ruble.getNominals()[j]);
+                        break;
+                    }
+                }
+            } else {
+                continue;
             }
-            if (sum >= 2000 && sum < 5000) {
-                nominal = 2000;
-                if (rubCounter2000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("2000", --rubCounter2000);
-                banknotesForIssue.add(nominal);
-            }
-            if (sum >= 1000 && sum < 2000) {
-                nominal = 1000;
-                if (rubCounter1000 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("1000", --rubCounter1000);
-                banknotesForIssue.add(nominal);
-            }
-            if (sum >= 500 && sum < 1000) {
-                nominal = 500;
-                if (rubCounter500 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("500", --rubCounter500);
-                banknotesForIssue.add(nominal);
-            }
-            if (sum >= 100 && sum < 500) {
-                nominal = 100;
-                if (rubCounter100 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("100", --rubCounter100);
-                banknotesForIssue.add(nominal);
-            }
-            if (sum >= 50 && sum < 100) {
-                nominal = 50;
-                if (rubCounter50 <= 0) displayNotEnoughBanknotesNominalError(nominal);
-                banknotes.put("50", --rubCounter50);
-                banknotesForIssue.add(nominal);
-            }
-            sum = sum - nominal;
             if (sum == 0) {
                 break;
             } else {
                 selectBanknotes(sum);
+                break;
             }
-            break;
         }
     }
 
+//    public boolean checkBanknoteCount(int banknote) {
+//        boolean result = true;
+//        if (banknote == Ruble.RUB_5000.getNominal()) {
+//            if (rubCounter5000 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter5000);
+////            }
+//        } else if (banknote == Ruble.RUB_2000.getNominal()) {
+//            if (rubCounter2000 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter2000);
+////            }
+//        } else if (banknote == Ruble.RUB_1000.getNominal()) {
+//            if (rubCounter1000 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter1000);
+////            }
+//        } else if (banknote == Ruble.RUB_500.getNominal()) {
+//            if (rubCounter500 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter500);
+////            }
+//        } else if (banknote == Ruble.RUB_200.getNominal()) {
+//            if (rubCounter200 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter200);
+////            }
+//        } else if (banknote == Ruble.RUB_100.getNominal()) {
+//            if (rubCounter100 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter100);
+////            }
+//        } else if (banknote == Ruble.RUB_50.getNominal()) {
+//            if (rubCounter50 == 0) result = false;
+////            else {
+////                banknotesContainer.put(String.valueOf(banknote), --rubCounter50);
+////            }
+//        }
+//        return result;
+//    }
+
+    private List<Integer> getBanknoteCounters() {
+        List<Integer> counters = new ArrayList<>();
+        counters.add(rubCounter5000);
+        counters.add(rubCounter2000);
+        counters.add(rubCounter1000);
+        counters.add(rubCounter500);
+        counters.add(rubCounter200);
+        counters.add(rubCounter100);
+        counters.add(rubCounter50);
+        return counters;
+    }
+
     /**
-     * Display error of not enough banknotes nominal in banknote container
+     * Display error of not enough banknotesContainer nominal in banknote container
      *
      * @param nominal banknote nominal value
      */
@@ -125,16 +129,16 @@ class BanknoteContainer {
     }
 
     /**
-     * Get total sum of banknotes in banknote container
+     * Get total sum of banknotesContainer in banknote container
      *
-     * @return total sum of banknotes
+     * @return total sum of banknotesContainer
      */
     int getBanknoteContainerTotalSum() {
         int banknotesTotal = 0;
-        for (String key : banknotes.keySet()) {
+        for (Integer key : banknotesContainer.keySet()) {
             for (Ruble nominal : Ruble.values()) {
-                if (Integer.parseInt(key) == nominal.getNominal()) {
-                    banknotesTotal = banknotesTotal + banknotes.get(key) * nominal.getNominal();
+                if (key == nominal.getNominal()) {
+                    banknotesTotal = banknotesTotal + banknotesContainer.get(key) * nominal.getNominal();
                     break;
                 }
             }
@@ -142,8 +146,8 @@ class BanknoteContainer {
         return banknotesTotal;
     }
 
-    Map<String, Integer> getBanknotes() {
-        return banknotes;
+    Map<Integer, Integer> getBanknotesContainer() {
+        return banknotesContainer;
     }
 }
 

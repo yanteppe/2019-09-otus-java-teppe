@@ -20,7 +20,7 @@ public class ATM implements IATM {
     /**
      * Accept the required number of banknotes
      *
-     * @param ruble currency unit
+     * @param ruble  currency unit
      * @param amount number of banknotes accepted
      */
     public void acceptBanknotes(Ruble ruble, int amount) {

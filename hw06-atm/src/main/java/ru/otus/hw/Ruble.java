@@ -28,6 +28,6 @@ public enum Ruble {
                 RUB_200.getNominal(),
                 RUB_100.getNominal(),
                 RUB_50.getNominal()
-        };
+            };
     }
 }

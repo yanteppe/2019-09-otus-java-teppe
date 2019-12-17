@@ -11,13 +11,6 @@ import java.util.*;
 class BanknoteContainer {
     private SortedMap<Integer, Integer> banknotesContainer = new TreeMap<>(Collections.reverseOrder());
     private List<Integer> banknotesForIssue = new ArrayList<>();
-    private int rubCounter50 = 0;
-    private int rubCounter100 = 0;
-    private int rubCounter200 = 0;
-    private int rubCounter500 = 0;
-    private int rubCounter1000 = 0;
-    private int rubCounter2000 = 0;
-    private int rubCounter5000 = 0;
 
     List<Integer> getBanknotesForIssue(int sum) {
         selectBanknotes(sum);
@@ -32,6 +25,12 @@ class BanknoteContainer {
         return sum;
     }
 
+    /**
+     * Fold banknotes in banknote container
+     *
+     * @param ruble  money unit
+     * @param amount banknotes amount
+     */
     void foldBanknotes(Ruble ruble, int amount) {
         banknotesContainer.put(ruble.getNominal(), amount);
     }
@@ -43,80 +42,58 @@ class BanknoteContainer {
      */
     private void selectBanknotes(int sum) {
         for (int i = 0; i < Ruble.getNominals().length; i++) {
+            // Определение наибольшего номинала банкноты для требуемой суммы через деление
             if (sum / Ruble.getNominals()[i] >= 1) {
                 int nominal = sum - (sum - Ruble.getNominals()[i]);
-                sum = sum - nominal;
                 for (int j = 0; j < Ruble.getNominals().length; j++) {
+                    // Выбор банкноты нужного номинала
                     if (nominal == Ruble.getNominals()[j]) {
-                        Integer banknoteCounter = banknotesContainer.get(Ruble.getNominals()[i]);
+                        Integer banknoteCounter = banknotesContainer.get(Ruble.getNominals()[j]);
+                        // Переход к следующей банкноте если кончились банкноты одного из номиналов
+                        if (banknoteCounter == 0) {
+                            int emptyCellsAmount = getEmptyCellAmount();
+                            i = emptyCellsAmount;
+                            j = emptyCellsAmount;
+                            banknoteCounter = banknotesContainer.get(Ruble.getNominals()[i]);
+                            nominal = sum - (sum - Ruble.getNominals()[i]);
+                        }
+                        // Обновления счетчика банкнот определенного номинала в контейнере банкнот
                         banknotesContainer.put(Ruble.getNominals()[i], --banknoteCounter);
+                        // Добавить выбранную банкноту для выдачи в отдельный массив
                         banknotesForIssue.add(Ruble.getNominals()[j]);
                         break;
                     }
                 }
+                // Вычесть из требуемой суммы выданные банкноты
+                if (sum != 0) {
+                    sum = sum - nominal;
+                }
             } else {
+                // Если номинал банкноты не подходит для выдачи суммы возврат в начало цикла
                 continue;
             }
+            // Если сумма набрана выход из массива и цикла
             if (sum == 0) {
                 break;
             } else {
+                // Если сумма не набрана рекурсивный вызов этого же метода
                 selectBanknotes(sum);
                 break;
             }
         }
     }
 
-//    public boolean checkBanknoteCount(int banknote) {
-//        boolean result = true;
-//        if (banknote == Ruble.RUB_5000.getNominal()) {
-//            if (rubCounter5000 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter5000);
-////            }
-//        } else if (banknote == Ruble.RUB_2000.getNominal()) {
-//            if (rubCounter2000 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter2000);
-////            }
-//        } else if (banknote == Ruble.RUB_1000.getNominal()) {
-//            if (rubCounter1000 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter1000);
-////            }
-//        } else if (banknote == Ruble.RUB_500.getNominal()) {
-//            if (rubCounter500 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter500);
-////            }
-//        } else if (banknote == Ruble.RUB_200.getNominal()) {
-//            if (rubCounter200 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter200);
-////            }
-//        } else if (banknote == Ruble.RUB_100.getNominal()) {
-//            if (rubCounter100 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter100);
-////            }
-//        } else if (banknote == Ruble.RUB_50.getNominal()) {
-//            if (rubCounter50 == 0) result = false;
-////            else {
-////                banknotesContainer.put(String.valueOf(banknote), --rubCounter50);
-////            }
-//        }
-//        return result;
-//    }
-
-    private List<Integer> getBanknoteCounters() {
-        List<Integer> counters = new ArrayList<>();
-        counters.add(rubCounter5000);
-        counters.add(rubCounter2000);
-        counters.add(rubCounter1000);
-        counters.add(rubCounter500);
-        counters.add(rubCounter200);
-        counters.add(rubCounter100);
-        counters.add(rubCounter50);
-        return counters;
+    /**
+     * Getting empty cells amount in banknote container
+     *
+     * @return int
+     */
+    public int getEmptyCellAmount() {
+        int emptyCellsAmount = 0;
+        for (Integer value : banknotesContainer.values()) {
+            if (value == 0) emptyCellsAmount++;
+        }
+        return emptyCellsAmount;
     }
 
     /**

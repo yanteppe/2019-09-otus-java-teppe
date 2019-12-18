@@ -4,35 +4,34 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.Objects;
 
 class IoC {
 
-    static ICalc createClass() {
-        Handler handler = null;
+    Calc createClass(String methodName) {
+        InvocationHandler handler = null;
         try {
-            handler = new Handler(new Calc());
+            handler = new Handler(new CalcImpl(), methodName);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        return (ICalc) Proxy.newProxyInstance(ICalc.class.getClassLoader(),
-                new Class[]{ICalc.class}, Objects.requireNonNull(handler));
+        return (Calc) Proxy.newProxyInstance(IoC.class.getClassLoader(), new Class<?>[]{Calc.class}, handler);
     }
 
-    static class Handler implements InvocationHandler {
-        private Calc calc;
+
+    public class Handler implements InvocationHandler {
+        private CalcImpl calc;
         boolean annotationFlag = false;
 
-        Handler(Calc calc) throws NoSuchMethodException {
-            this.calc = calc;
-            if (calc.getClass().getMethod("sum", int.class, int.class).isAnnotationPresent(Log.class)) {
+        Handler(Calc calc, String methodName) throws NoSuchMethodException {
+            this.calc = (CalcImpl) calc;
+            if (calc.getClass().getMethod(String.valueOf(methodName), int.class, int.class).isAnnotationPresent(Log.class)) {
                 annotationFlag = true;
             }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if (annotationFlag){
+            if (annotationFlag) {
                 printLog(calc.getClass().getMethod("sum", int.class, int.class), args);
             }
             method.invoke(calc, args);

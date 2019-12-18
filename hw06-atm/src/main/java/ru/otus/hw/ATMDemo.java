@@ -1,5 +1,6 @@
 package ru.otus.hw;
 
+import ru.otus.hw.atm.ATM;
 import ru.otus.hw.atm.ATMImpl;
 
 /**
@@ -12,7 +13,7 @@ import ru.otus.hw.atm.ATMImpl;
 public class ATMDemo {
 
     public static void main(String[] args) {
-        ATMImpl atm = new ATMImpl();
+        ATM atm = new ATMImpl();
         atm.acceptBanknotes(Ruble.RUB_50, 3);
         atm.acceptBanknotes(Ruble.RUB_100, 3);
         atm.acceptBanknotes(Ruble.RUB_200, 3);

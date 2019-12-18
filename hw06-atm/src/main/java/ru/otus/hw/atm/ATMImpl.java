@@ -11,10 +11,10 @@ import java.util.Arrays;
  * ATMImpl emulator class
  */
 public class ATMImpl implements ATM {
-    private BanknoteContainer banknoteContainer;
+    private BanknoteContainerImpl banknoteContainer;
 
     public ATMImpl() {
-        banknoteContainer = new BanknoteContainer();
+        banknoteContainer = new BanknoteContainerImpl();
     }
 
     /**

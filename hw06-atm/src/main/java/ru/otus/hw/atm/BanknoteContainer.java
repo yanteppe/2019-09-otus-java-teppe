@@ -6,7 +6,7 @@ import ru.otus.hw.exception.NotEnoughBanknotesNominalException;
 import java.util.*;
 
 /**
- * ATM banknote storage container
+ * ATMImpl banknote storage container
  */
 class BanknoteContainer {
     private SortedMap<Integer, Integer> banknotesContainer = new TreeMap<>(Collections.reverseOrder());
@@ -41,26 +41,26 @@ class BanknoteContainer {
      * @param sum desired sum
      */
     private void selectBanknotes(int sum) {
-        for (int i = 0; i < Ruble.getNominals().length; i++) {
+        for (int i = 0; i < Ruble.values().length; i++) {
             // Определение наибольшего номинала банкноты для требуемой суммы через деление
-            if (sum / Ruble.getNominals()[i] >= 1) {
-                int nominal = sum - (sum - Ruble.getNominals()[i]);
-                for (int j = 0; j < Ruble.getNominals().length; j++) {
+            if (sum / Ruble.values()[i].getNominal() >= 1) {
+                int nominal = sum - (sum - Ruble.values()[i].getNominal());
+                for (int j = 0; j < Ruble.values().length; j++) {
                     // Выбор банкноты нужного номинала
-                    if (nominal == Ruble.getNominals()[j]) {
-                        Integer banknoteCounter = banknotesContainer.get(Ruble.getNominals()[j]);
+                    if (nominal == Ruble.values()[j].getNominal()) {
+                        Integer banknoteCounter = banknotesContainer.get(Ruble.values()[j].getNominal());
                         // Переход к следующей банкноте если кончились банкноты одного из номиналов
                         if (banknoteCounter == 0) {
                             int emptyCellsAmount = getEmptyCellAmount();
                             i = emptyCellsAmount;
                             j = emptyCellsAmount;
-                            banknoteCounter = banknotesContainer.get(Ruble.getNominals()[i]);
-                            nominal = sum - (sum - Ruble.getNominals()[i]);
+                            banknoteCounter = banknotesContainer.get(Ruble.values()[i].getNominal());
+                            nominal = sum - (sum - Ruble.values()[i].getNominal());
                         }
                         // Обновления счетчика банкнот определенного номинала в контейнере банкнот
-                        banknotesContainer.put(Ruble.getNominals()[i], --banknoteCounter);
+                        banknotesContainer.put(Ruble.values()[i].getNominal(), --banknoteCounter);
                         // Добавить выбранную банкноту для выдачи в отдельный массив
-                        banknotesForIssue.add(Ruble.getNominals()[j]);
+                        banknotesForIssue.add(Ruble.values()[j].getNominal());
                         break;
                     }
                 }

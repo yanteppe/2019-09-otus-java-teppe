@@ -1,9 +1,9 @@
 package ru.otus.hw.atm;
 
-import ru.otus.hw.Ruble;
+import ru.otus.hw.banknote.Ruble;
 
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
 
 public interface BanknoteContainer {
 
@@ -19,5 +19,5 @@ public interface BanknoteContainer {
 
     int getBanknoteContainerTotalSum();
 
-    Map<Integer, Integer> getBanknotesContainer();
+    SortedMap<Ruble, Integer> getBanknotesContainer();
 }

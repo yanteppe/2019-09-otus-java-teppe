@@ -2,6 +2,7 @@ package ru.otus.hw;
 
 import ru.otus.hw.atm.ATM;
 import ru.otus.hw.atm.ATMImpl;
+import ru.otus.hw.banknote.Ruble;
 
 /**
  * ATMImpl emulator demo<br>
@@ -22,7 +23,7 @@ public class ATMDemo {
         atm.acceptBanknotes(Ruble.RUB_2000, 3);
         atm.acceptBanknotes(Ruble.RUB_5000, 3);
         atm.displayAccountStatus();
-        atm.getBanknotes(26000);
+        atm.getBanknotes(26550);
         atm.displayAccountStatus();
     }
 }

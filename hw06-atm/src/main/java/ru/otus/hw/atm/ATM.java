@@ -1,6 +1,6 @@
 package ru.otus.hw.atm;
 
-import ru.otus.hw.Ruble;
+import ru.otus.hw.banknote.Ruble;
 
 public interface ATM {
 

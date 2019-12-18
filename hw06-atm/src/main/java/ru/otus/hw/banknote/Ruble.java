@@ -1,4 +1,4 @@
-package ru.otus.hw;
+package ru.otus.hw.banknote;
 
 public enum Ruble {
     RUB_5000(5000),

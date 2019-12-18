@@ -1,6 +1,6 @@
 package ru.otus.hw.atm;
 
-import ru.otus.hw.Ruble;
+import ru.otus.hw.banknote.Ruble;
 import ru.otus.hw.exception.NotEnoughBanknotesSumException;
 import ru.otus.hw.exception.SumParityException;
 import ru.otus.hw.exception.ZeroSumException;

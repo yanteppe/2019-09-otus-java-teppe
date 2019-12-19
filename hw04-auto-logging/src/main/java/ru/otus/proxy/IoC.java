@@ -32,7 +32,7 @@ class IoC {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (annotationFlag) {
-                printLog(calc.getClass().getMethod("sum", int.class, int.class), args);
+                printLog(calc.getClass().getMethod(method.getName(), int.class, int.class), args);
             }
             method.invoke(calc, args);
             return this;

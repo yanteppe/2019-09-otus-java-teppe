@@ -11,7 +11,7 @@ import java.util.Arrays;
  * ATMImpl emulator class
  */
 public class ATMImpl implements ATM {
-    private BanknoteContainerImpl banknoteContainer;
+    private BanknoteContainer banknoteContainer;
 
     public ATMImpl() {
         banknoteContainer = new BanknoteContainerImpl();

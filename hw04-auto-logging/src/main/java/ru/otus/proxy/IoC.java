@@ -2,7 +2,9 @@ package ru.otus.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 class IoC {
@@ -17,14 +19,13 @@ class IoC {
         return (Calc) Proxy.newProxyInstance(IoC.class.getClassLoader(), new Class<?>[]{Calc.class}, handler);
     }
 
-
     public class Handler implements InvocationHandler {
         private CalcImpl calc;
         boolean annotationFlag = false;
 
         Handler(Calc calc, String methodName) throws NoSuchMethodException {
             this.calc = (CalcImpl) calc;
-            if (calc.getClass().getMethod(String.valueOf(methodName), int.class, int.class).isAnnotationPresent(Log.class)) {
+            if (calc.getClass().getMethod(String.valueOf(methodName), int.class, int.class, int.class).isAnnotationPresent(Log.class)) {
                 annotationFlag = true;
             }
         }
@@ -32,7 +33,7 @@ class IoC {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (annotationFlag) {
-                printLog(calc.getClass().getMethod(method.getName(), int.class, int.class), args);
+                printLog(calc.getClass().getMethod(method.getName(), method.getParameterTypes()), args);
             }
             method.invoke(calc, args);
             return this;

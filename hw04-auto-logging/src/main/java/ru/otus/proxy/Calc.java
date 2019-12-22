@@ -2,7 +2,13 @@ package ru.otus.proxy;
 
 public interface Calc {
 
-    void sumХ(int x, int y);
+    void sum(int x, int y);
 
-    void sumY(int x, int y, int z);
+    void sumX(int x, int y, int z);
+
+    void subtraction (int x, int y);
+
+    void multiplication(int x, int y);
+
+    void division(int x, int y);
 }

@@ -15,7 +15,9 @@
         <module>hw02-array-list</module>
         <module>hw03-garbage-collectors</module>
         <module>hw04-auto-logging</module>
+        <module>hw05-test-framework</module>
         <module>hw06-atm</module>
+        <module>hw05-test-framework</module>
     </modules>
 
     <properties>

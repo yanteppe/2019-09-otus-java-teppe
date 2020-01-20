@@ -1,6 +1,6 @@
-package ru.otus.atm_department.atm;
+package ru.otus.atm;
 
-import ru.otus.atm_department.atm.banknote.Ruble;
+import ru.otus.atm.banknote.Ruble;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -17,12 +17,7 @@ public interface BanknoteContainer {
 
     int getEmptyCellAmount();
 
-    /**
-     * Get total sum of banknotesContainer in banknote container
-     *
-     * @return total sum of banknotesContainer
-     */
-    int getBanknoteContainerBalance();
+    int getBanknoteContainerTotalSum();
 
     SortedMap<Ruble, Integer> getBanknotesContainer();
 }

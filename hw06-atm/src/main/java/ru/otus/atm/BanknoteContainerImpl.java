@@ -1,7 +1,7 @@
-package ru.otus.atm_department.atm;
+package ru.otus.atm;
 
-import ru.otus.atm_department.atm.banknote.Ruble;
-import ru.otus.atm_department.atm.exception.NotEnoughBanknotesNominalException;
+import ru.otus.atm.banknote.Ruble;
+import ru.otus.atm.exception.NotEnoughBanknotesNominalException;
 
 import java.util.*;
 
@@ -106,21 +106,21 @@ class BanknoteContainerImpl implements BanknoteContainer {
     }
 
     /**
-     * Get a balance at an ATM
+     * Get total sum of banknotesContainer in banknote container
      *
-     * @return ATM balance
+     * @return total sum of banknotesContainer
      */
-    public int getBanknoteContainerBalance() {
-        int balance = 0;
+    public int getBanknoteContainerTotalSum() {
+        int banknotesTotal = 0;
         for (Ruble key : banknotesContainer.keySet()) {
             for (Ruble nominal : Ruble.values()) {
                 if (key.getNominal() == nominal.getNominal()) {
-                    balance = balance + banknotesContainer.get(key) * nominal.getNominal();
+                    banknotesTotal = banknotesTotal + banknotesContainer.get(key) * nominal.getNominal();
                     break;
                 }
             }
         }
-        return balance;
+        return banknotesTotal;
     }
 
     public SortedMap<Ruble, Integer> getBanknotesContainer() {

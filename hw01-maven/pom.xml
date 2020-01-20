@@ -33,7 +33,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.atm_department.Main</mainClass>
+                            <mainClass>ru.otus.maven.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

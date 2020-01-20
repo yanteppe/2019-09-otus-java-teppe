@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-public class JdkProxyDemo {
+public class SandboxProxyDemo {
     public static void main(String[] args) {
         Original original = new Original();
         Handler handler = new Handler(original);

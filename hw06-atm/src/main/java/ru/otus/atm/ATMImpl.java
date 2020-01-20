@@ -47,7 +47,7 @@ public class ATMImpl implements ATM {
      */
     public void displayAccountStatus() {
         System.out.println("Account status: " + banknoteContainer.getBanknoteContainerTotalSum() +
-                ", banknotes: " + banknoteContainer.getBanknotesContainer().toString());
+                ", container: " + banknoteContainer.getBanknotesContainer().toString());
     }
 
     /**

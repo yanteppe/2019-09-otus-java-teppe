@@ -1,18 +1,41 @@
 package ru.otus.atm_department.atm;
 
 import ru.otus.atm_department.atm.banknote.Ruble;
-import ru.otus.atm_department.atm.exception.NotEnoughBanknotesNominalException;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * ATMImpl banknote storage container
  */
-class BanknoteContainerImpl implements BanknoteContainer {
-    private SortedMap<Ruble, Integer> banknotesContainer = new TreeMap<>(Collections.reverseOrder());
-    private List<Integer> banknotesForIssue = new ArrayList<>();
+class BanknoteContainerImpl implements BanknoteContainer, Serializable {
+    private SortedMap<Ruble, Integer> banknotesContainer;
+    private List<Integer> banknotesForIssue;
 
-    public List<Integer> getBanknotesForIssue(int sum) {
+    public BanknoteContainerImpl() {
+        this.banknotesContainer = new TreeMap<>(Collections.reverseOrder());
+        this.banknotesForIssue = new ArrayList<>();
+    }
+
+    public BanknoteContainerImpl(SortedMap<Ruble, Integer> banknotesContainer, List<Integer> banknotesForIssue) {
+        this.banknotesContainer = banknotesContainer;
+        this.banknotesForIssue = banknotesForIssue;
+    }
+
+    /**
+     * Constructor for copying object
+     *
+     * @param container implementation of BanknoteContainer
+     */
+    BanknoteContainerImpl(BanknoteContainer container) {
+        this(container.getBanknotesContainer(), container.getBanknotesForIssue());
+    }
+
+    public List<Integer> getBanknotesForIssue() {
+        return banknotesForIssue;
+    }
+
+    public List<Integer> getSumBanknotesToIssue(int sum) {
         selectBanknotes(sum);
         return banknotesForIssue;
     }
@@ -57,7 +80,7 @@ class BanknoteContainerImpl implements BanknoteContainer {
                             banknoteCounter = banknotesContainer.get(Ruble.values()[i]);
                             nominal = sum - (sum - Ruble.values()[i].getNominal());
                         }
-                        // Обновления счетчика банкнот определенного номинала в контейнере банкнот
+                        // Обновление счетчика банкнот определенного номинала в контейнере банкнот
                         banknotesContainer.put(Ruble.values()[i], --banknoteCounter);
                         // Добавить выбранную банкноту для выдачи в отдельный массив
                         banknotesForIssue.add(Ruble.values()[j].getNominal());
@@ -76,7 +99,7 @@ class BanknoteContainerImpl implements BanknoteContainer {
             if (sum == 0) {
                 break;
             } else {
-                // Если сумма не набрана рекурсивный вызов этого же метода
+                // Если сумма не набрана рекурсивный вызов
                 selectBanknotes(sum);
                 break;
             }
@@ -94,15 +117,6 @@ class BanknoteContainerImpl implements BanknoteContainer {
             if (value == 0) emptyCellsAmount++;
         }
         return emptyCellsAmount;
-    }
-
-    /**
-     * Display error of not enough banknotesContainer nominal in banknote container
-     *
-     * @param nominal banknote nominal value
-     */
-    private void displayNotEnoughBanknotesNominalError(int nominal) {
-        throw new NotEnoughBanknotesNominalException(String.format("ОШИБКА: Сумма не может быть выдана, недостаточно банкнот номиналом %s", nominal));
     }
 
     /**

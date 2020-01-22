@@ -22,7 +22,6 @@ public class ATMDepartment implements ATMEventSubscriber {
         System.out.println("TOTAL ATMs BALANCE: " + totalAtmBalance);
     }
 
-    // TODO: вместо этого метода рассмотреть паттерн Chains of responsibility или Command...
     void restoreATMsOriginalState(List<ATMImpl.ATMMemento> atmMemento) {
         for (int i = 0; i < atmList.size(); i++) {
             atmList.get(i).loadState(atmMemento.get(i));

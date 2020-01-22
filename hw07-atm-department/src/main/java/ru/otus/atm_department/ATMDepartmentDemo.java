@@ -54,7 +54,7 @@ public class ATMDepartmentDemo {
         // endregion
 
         // region Demo Memento and Command pattern
-        System.out.println("\n--- Demo Memento pattern ---");
+        System.out.println("\n--- Demo Memento and Command pattern ---");
         ATM atm4 = new ATMImpl();
         ATM atm5 = new ATMImpl();
         ATM atm6 = new ATMImpl();

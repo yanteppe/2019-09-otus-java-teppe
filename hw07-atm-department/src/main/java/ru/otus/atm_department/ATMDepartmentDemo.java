@@ -4,8 +4,12 @@ import ru.otus.atm_department.atm.ATM;
 import ru.otus.atm_department.atm.ATMCaretaker;
 import ru.otus.atm_department.atm.ATMImpl;
 import ru.otus.atm_department.atm.banknote.Ruble;
+import ru.otus.atm_department.command.GetTotalBalanceCommand;
+import ru.otus.atm_department.command.InvokerCommand;
+import ru.otus.atm_department.command.RestoreStateCommand;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ATMDepartmentDemo {
 
@@ -51,6 +55,56 @@ public class ATMDepartmentDemo {
         atmDepartment1.displayATMsTotalBalance();
         // endregion
 
+//        // region Demo Memento pattern
+//        System.out.println("\n--- Demo Memento pattern ---");
+//        ATM atm4 = new ATMImpl();
+//        ATM atm5 = new ATMImpl();
+//        ATM atm6 = new ATMImpl();
+//        ATMDepartment atmDepartment2 = new ATMDepartment(Arrays.asList(atm4, atm5, atm6));
+//        atmDepartment2.subscribe((ATMEventPublisher) atm4);
+//        atmDepartment2.subscribe((ATMEventPublisher) atm5);
+//        atmDepartment2.subscribe((ATMEventPublisher) atm6);
+//
+//        // Установка начального состояния
+//        atm4.acceptBanknotes(Ruble.RUB_50, 1);
+//        atm5.acceptBanknotes(Ruble.RUB_100, 2);
+//        atm6.acceptBanknotes(Ruble.RUB_200, 3);
+//
+//        // Сохранение состояния
+//        ATMCaretaker caretaker4 = new ATMCaretaker();
+//        ATMCaretaker caretaker5 = new ATMCaretaker();
+//        ATMCaretaker caretaker6 = new ATMCaretaker();
+//        caretaker4.setAtmMemento(((ATMImpl) atm4).saveState());
+//        caretaker5.setAtmMemento(((ATMImpl) atm5).saveState());
+//        caretaker6.setAtmMemento(((ATMImpl) atm6).saveState());
+//        System.out.println("\nЗаданное состояние:");
+//        atm4.displayAccountStatus();
+//        atm5.displayAccountStatus();
+//        atm6.displayAccountStatus();
+//        atmDepartment2.displayATMsTotalBalance();
+//
+//        // Изменение состояния
+//        System.out.println("\nИзмененное состояние:");
+//        //atm4.acceptBanknotes(Ruble.RUB_100, 1);
+//        //atm5.acceptBanknotes(Ruble.RUB_200, 1);
+//        //atm6.acceptBanknotes(Ruble.RUB_500, 1);
+//        atm4.getBanknotes(50);
+//        atm5.getBanknotes(100);
+//        atm6.getBanknotes(400);
+//        atm4.displayAccountStatus();
+//        atm5.displayAccountStatus();
+//        atm6.displayAccountStatus();
+//        atmDepartment2.displayATMsTotalBalance();
+//
+//        // Восстановление изначального состояния
+//        System.out.println("\nВосстановление изначального состояния:");
+//        atmDepartment2.restoreATMsOriginalState(
+//                Arrays.asList(caretaker4.getAtmMemento(), caretaker5.getAtmMemento(), caretaker6.getAtmMemento()));
+//        atm4.displayAccountStatus();
+//        atm5.displayAccountStatus();
+//        atm6.displayAccountStatus();
+//        atmDepartment2.displayATMsTotalBalance();
+//        // endregion
 
         // region Demo Memento pattern
         System.out.println("\n--- Demo Memento pattern ---");
@@ -58,6 +112,7 @@ public class ATMDepartmentDemo {
         ATM atm5 = new ATMImpl();
         ATM atm6 = new ATMImpl();
         ATMDepartment atmDepartment2 = new ATMDepartment(Arrays.asList(atm4, atm5, atm6));
+        atmDepartment2.addCommand(new GetTotalBalanceCommand(atmDepartment2));
         atmDepartment2.subscribe((ATMEventPublisher) atm4);
         atmDepartment2.subscribe((ATMEventPublisher) atm5);
         atmDepartment2.subscribe((ATMEventPublisher) atm6);
@@ -78,7 +133,8 @@ public class ATMDepartmentDemo {
         atm4.displayAccountStatus();
         atm5.displayAccountStatus();
         atm6.displayAccountStatus();
-        atmDepartment2.displayATMsTotalBalance();
+        atmDepartment2.executeCommand(GetTotalBalanceCommand.class);
+
 
         // Изменение состояния
         System.out.println("\nИзмененное состояние:");
@@ -91,16 +147,23 @@ public class ATMDepartmentDemo {
         atm4.displayAccountStatus();
         atm5.displayAccountStatus();
         atm6.displayAccountStatus();
-        atmDepartment2.displayATMsTotalBalance();
+        atmDepartment2.executeCommand(GetTotalBalanceCommand.class);
+
 
         // Восстановление изначального состояния
         System.out.println("\nВосстановление изначального состояния:");
-        atmDepartment2.restoreATMsOriginalState(
-                Arrays.asList(caretaker4.getAtmMemento(), caretaker5.getAtmMemento(), caretaker6.getAtmMemento()));
+        List<ATMImpl.ATMMemento> atmMementoList = Arrays.asList(
+                caretaker4.getAtmMemento(), caretaker5.getAtmMemento(), caretaker6.getAtmMemento());
+        // Добавление команд департамента банкоматов:
+        // получть общий баланс банкоматов, восстановить изначальное состояние банкоматов.
+        atmDepartment2.addCommand(new RestoreStateCommand(atmDepartment2, atmMementoList));
+        atmDepartment2.executeCommand(RestoreStateCommand.class);
+
         atm4.displayAccountStatus();
         atm5.displayAccountStatus();
         atm6.displayAccountStatus();
-        atmDepartment2.displayATMsTotalBalance();
+        atmDepartment2.executeCommand(GetTotalBalanceCommand.class);
         // endregion
+
     }
 }

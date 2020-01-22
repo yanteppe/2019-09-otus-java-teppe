@@ -3,6 +3,7 @@ package ru.otus.atm_department;
 
 import ru.otus.atm_department.atm.ATM;
 import ru.otus.atm_department.atm.ATMImpl;
+import ru.otus.atm_department.command.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +11,29 @@ import java.util.List;
 public class ATMDepartment implements ATMEventSubscriber {
     private List<ATM> atmList;
     private List<ATMEventPublisher> publishers;
+    private List<Command> commands;
     private int totalAtmBalance;
 
     ATMDepartment(List<ATM> atmList) {
         this.atmList = atmList;
         publishers = new ArrayList<>();
+        commands = new ArrayList<>();
     }
 
-    void displayATMsTotalBalance() {
+    void addCommand(Command command) {
+        commands.add(command);
+    }
+
+    public void executeCommand(Class clazz) {
+        commands.stream().filter(command -> command.getClass().equals(clazz)).forEach(Command::execute);
+    }
+
+    public void displayATMsTotalBalance() {
         updateTotalBalance();
         System.out.println("TOTAL ATMs BALANCE: " + totalAtmBalance);
     }
 
-    void restoreATMsOriginalState(List<ATMImpl.ATMMemento> atmMemento) {
+    public void restoreATMsOriginalState(List<ATMImpl.ATMMemento> atmMemento) {
         for (int i = 0; i < atmList.size(); i++) {
             atmList.get(i).loadState(atmMemento.get(i));
         }
@@ -50,4 +61,6 @@ public class ATMDepartment implements ATMEventSubscriber {
     void unsubscribeAll(List<ATMEventPublisher> publishers) {
         publishers.forEach(publisher -> publisher.removeSubscriber(this));
     }
+
+
 }

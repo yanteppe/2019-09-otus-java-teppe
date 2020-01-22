@@ -5,7 +5,7 @@ import ru.otus.atm_department.atm.ATMImpl;
 
 import java.util.List;
 
-public class RestoreStateCommand implements Command{
+public class RestoreStateCommand implements Command {
     private ATMDepartment atmDepartment;
     private List<ATMImpl.ATMMemento> atmMemento;
 

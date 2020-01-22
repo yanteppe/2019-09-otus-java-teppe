@@ -1,4 +1,4 @@
-package ru.otus.atm_department.atm;
+package ru.otus.atm_department.atm.container;
 
 import ru.otus.atm_department.atm.banknote.Ruble;
 
@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * ATMImpl banknote storage container
  */
-class BanknoteContainerImpl implements BanknoteContainer, Serializable {
+public class BanknoteContainerImpl implements BanknoteContainer, Serializable {
     private SortedMap<Ruble, Integer> banknotesContainer;
     private List<Integer> banknotesForIssue;
 
@@ -17,7 +17,7 @@ class BanknoteContainerImpl implements BanknoteContainer, Serializable {
         this.banknotesForIssue = new ArrayList<>();
     }
 
-    public BanknoteContainerImpl(SortedMap<Ruble, Integer> banknotesContainer, List<Integer> banknotesForIssue) {
+    private BanknoteContainerImpl(SortedMap<Ruble, Integer> banknotesContainer, List<Integer> banknotesForIssue) {
         this.banknotesContainer = banknotesContainer;
         this.banknotesForIssue = banknotesForIssue;
     }

@@ -1,6 +1,5 @@
 package ru.otus.atm_department;
 
-
 import java.util.List;
 
 public interface ATMEventPublisher {

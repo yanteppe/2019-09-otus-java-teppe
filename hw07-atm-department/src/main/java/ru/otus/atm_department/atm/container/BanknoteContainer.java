@@ -1,4 +1,4 @@
-package ru.otus.atm_department.atm;
+package ru.otus.atm_department.atm.container;
 
 import ru.otus.atm_department.atm.banknote.Ruble;
 

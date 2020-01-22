@@ -3,6 +3,8 @@ package ru.otus.atm_department.atm;
 import ru.otus.atm_department.ATMEventPublisher;
 import ru.otus.atm_department.ATMEventSubscriber;
 import ru.otus.atm_department.atm.banknote.Ruble;
+import ru.otus.atm_department.atm.container.BanknoteContainer;
+import ru.otus.atm_department.atm.container.BanknoteContainerImpl;
 import ru.otus.atm_department.atm.exception.NotEnoughBanknotesSumException;
 import ru.otus.atm_department.atm.exception.SumParityException;
 import ru.otus.atm_department.atm.exception.ZeroSumException;

@@ -204,7 +204,7 @@ public class ATMImpl implements ATM, ATMEventPublisher {
          * Saving the state of BanknoteContainer - copying object through serialization
          *
          * @param banknoteContainer object BanknoteContainer
-         * @return BanknoteContainer
+         * @return copy of BanknoteContainer
          * @throws ClassNotFoundException ClassNotFoundException
          */
         private BanknoteContainer serializeToSave(BanknoteContainer banknoteContainer) throws ClassNotFoundException {

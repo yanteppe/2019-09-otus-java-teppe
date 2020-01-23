@@ -201,7 +201,7 @@ public class ATMImpl implements ATM, ATMEventPublisher {
         }
 
         /**
-         * Save object BanknoteContainer
+         * Saving the state of BanknoteContainer - copying object through serialization
          *
          * @param banknoteContainer object BanknoteContainer
          * @return BanknoteContainer

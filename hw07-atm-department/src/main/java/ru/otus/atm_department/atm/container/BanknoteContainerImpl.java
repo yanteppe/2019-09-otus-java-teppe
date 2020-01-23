@@ -17,20 +17,6 @@ public class BanknoteContainerImpl implements BanknoteContainer, Serializable {
         this.banknotesForIssue = new ArrayList<>();
     }
 
-    private BanknoteContainerImpl(SortedMap<Ruble, Integer> banknotesContainer, List<Integer> banknotesForIssue) {
-        this.banknotesContainer = banknotesContainer;
-        this.banknotesForIssue = banknotesForIssue;
-    }
-
-    /**
-     * Constructor for copying object
-     *
-     * @param container implementation of BanknoteContainer
-     */
-    BanknoteContainerImpl(BanknoteContainer container) {
-        this(container.getBanknotesContainer(), container.getBanknotesForIssue());
-    }
-
     public List<Integer> getBanknotesForIssue() {
         return banknotesForIssue;
     }

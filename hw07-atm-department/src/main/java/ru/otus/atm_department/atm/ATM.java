@@ -1,6 +1,5 @@
 package ru.otus.atm_department.atm;
 
-import ru.otus.atm_department.ATMEventPublisher;
 import ru.otus.atm_department.atm.banknote.Ruble;
 
 public interface ATM {
@@ -9,7 +8,9 @@ public interface ATM {
 
     void getBanknotes(int sum);
 
-    int getATMBalance();
+    int getAtmBalance();
+
+    void loadState(ATMImpl.ATMMemento atmMemento);
 
     void displayAccountStatus();
 

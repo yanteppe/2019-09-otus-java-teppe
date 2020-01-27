@@ -47,7 +47,7 @@ public class ATMImpl implements ATM, ATMEventPublisher {
      */
     public void displayAccountStatus() {
         System.out.println(this.atmId + " Account status: " + getAtmBalance() +
-                ", banknotes: " + banknoteContainer.getBanknotesContainer().toString());
+                ", container: " + banknoteContainer.getBanknotesContainer().toString());
     }
 
     /**

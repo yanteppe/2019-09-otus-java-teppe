@@ -1,4 +1,4 @@
-package ru.otus.atm_department.atm;
+package ru.otus.atm_department.atm.container;
 
 import ru.otus.atm_department.atm.banknote.Ruble;
 
@@ -7,7 +7,7 @@ import java.util.SortedMap;
 
 public interface BanknoteContainer {
 
-    List getBanknotesForIssue(int sum);
+    List getSumBanknotesToIssue(int sum);
 
     int getIssuedSum();
 
@@ -25,4 +25,6 @@ public interface BanknoteContainer {
     int getBanknoteContainerBalance();
 
     SortedMap<Ruble, Integer> getBanknotesContainer();
+
+    List<Integer> getBanknotesForIssue();
 }

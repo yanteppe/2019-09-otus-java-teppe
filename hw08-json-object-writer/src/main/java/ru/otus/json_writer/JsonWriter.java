@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class JsonWriter {
 
-    public JsonObject createJsonObject() {
+    public JsonObject createJson() {
         var jsonObject = Json.createObjectBuilder()
                 .add("firstName", "Duke")
                 .add("age", 28)
@@ -25,7 +25,7 @@ public class JsonWriter {
                                         .add("type", "home")
                                         .add("number", "222-222-2222")))
                 .build();
-        System.out.println("jsonObject:" + jsonObject + "\n");
+        System.out.println("Json object: " + jsonObject + "\n");
         return jsonObject;
     }
 }

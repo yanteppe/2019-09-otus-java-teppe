@@ -46,6 +46,12 @@
             <artifactId>javax.json</artifactId>
             <version>${javax.json.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

@@ -12,6 +12,8 @@ class JsonCreatorTest {
         var someObject = new SomeObject();
         String myJsonResult = new JsonCreator().toJson(someObject);
         String gsonResult = new Gson().toJson(someObject);
+        System.out.println("MyJson: " + myJsonResult + "\n");
+        System.out.println("Gson: " + gsonResult);
         assertEquals(gsonResult, myJsonResult);
     }
 }

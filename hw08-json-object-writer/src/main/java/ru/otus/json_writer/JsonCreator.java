@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class for creating Json
+ */
 class JsonCreator {
     private List<String> arrayTypes = Arrays.asList("byte[]", "short[]", "int[]", "long[]", "double[]");
     private StringBuilder jsonString = new StringBuilder();
@@ -16,6 +19,12 @@ class JsonCreator {
         this.jsonString.append("{");
     }
 
+    /**
+     * Create json from object
+     *
+     * @param object some object
+     * @return Json string
+     */
     String toJson(Object object) {
         this.object = object;
         try {
@@ -26,26 +35,38 @@ class JsonCreator {
         }
     }
 
+    /**
+     * Parsing object and creating a Json string
+     *
+     * @param object object for Json
+     * @return Json string
+     * @throws IllegalAccessException IllegalAccessException
+     */
     private String createJson(Object object) throws IllegalAccessException {
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             Object fieldValue = field.get(object);
-            if (isArrayPrimitivesOrString(field)) {
-                jsonString.append(toJsonFormat(field, field.getName(), parseArray(object, field)));
+            if (isArrayPrimitivesOrStrings(field)) {
+                jsonString.append(convertToString(field, field.getName(), selectArrayType(object, field)));
             } else if (isArrayOrListObject(object, field)) {
-                jsonString.append(toJsonFormat(field, field.getName(), ""));
+                jsonString.append(convertToString(field, field.getName(), ""));
             } else if (isObject(field)) {
                 createJson(fieldValue);
             } else {
-                jsonString.append(toJsonFormat(field, field.getName(), fieldValue.toString()));
+                jsonString.append(convertToString(field, field.getName(), fieldValue.toString()));
             }
         }
         String string = jsonString.append("}").toString();
         int charIndex = string.lastIndexOf(',');
-        String json = string.substring(0, charIndex) + string.substring(charIndex + 1);
-        return json;
+        return string.substring(0, charIndex) + string.substring(charIndex + 1);
     }
 
+    /**
+     * Check object field is Object or not
+     *
+     * @param field object field
+     * @return boolean
+     */
     private boolean isObject(Field field) {
         if (field.getType().isPrimitive()) {
             return false;
@@ -59,6 +80,12 @@ class JsonCreator {
         return true;
     }
 
+    /**
+     * Check object field is array or list
+     *
+     * @param object object for Json
+     * @return boolean
+     */
     private boolean isArrayOrListObject(Object object, Field field) {
         List listObjects = null;
         if (field.getType().getTypeName().equals("java.util.List") || field.getType().getTypeName().equals("java.lang.Object[]")) {
@@ -84,32 +111,53 @@ class JsonCreator {
         return true;
     }
 
-    private boolean isArrayPrimitivesOrString(Field field) {
+    /**
+     * Check object field is primitives array or strings array
+     *
+     * @param field object field
+     * @return boolean
+     */
+    private boolean isArrayPrimitivesOrStrings(Field field) {
         return field.getType().getTypeName().contains("[]")
                 && !field.getType().getTypeName().contains("Object[]");
     }
 
-
-    private String toJsonFormat(Field field, String type, String value) throws IllegalAccessException {
+    /**
+     * Convert object field to string
+     *
+     * @param field object field
+     * @param type  type field
+     * @param value value field
+     * @return String
+     * @throws IllegalAccessException IllegalAccessException
+     */
+    private String convertToString(Field field, String type, String value) throws IllegalAccessException {
         if (field.getType().isPrimitive() && !field.getType().getTypeName().equals("char")) {
-            return createPrimitive(type, value);
+            return convertPrimitivesToString(type, value);
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("char")) {
             return createString(type, value);
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("String")) {
             return createString(type, value);
         } else if (field.getType().isArray() && field.getType().getTypeName().contains("String")) {
-            return createStringsArray(type, value);
+            return convertStringsArrayToString(type, value);
         } else if (field.getType().isArray() && arrayTypes.contains(field.getType().getTypeName())) {
-            return createPrimitivesArray(type, value);
+            return convertPrimitivesArrayToString(type, value);
         } else if (field.getType().getTypeName().contains("char[]")) {
-            return createStringsArray(type, value);
+            return convertStringsArrayToString(type, value);
         } else if (field.getType().getTypeName().contains("List") || field.getType().getTypeName().contains("Object[]")) {
-            return createListObjects(field);
+            return convertListObjectsToString(field);
         }
         return null;
     }
 
-    private String createListObjects(Field field) throws IllegalAccessException {
+    /**
+     * Convert list objects to string
+     *
+     * @param field object field
+     * @return string
+     * @throws IllegalAccessException IllegalAccessException
+     */
+    private String convertListObjectsToString(Field field) throws IllegalAccessException {
         StringBuilder json = new StringBuilder();
         field.setAccessible(true);
         Object fieldValue = field.get(object);
@@ -120,7 +168,7 @@ class JsonCreator {
             objects = (List) fieldValue;
         }
         if (objects.iterator().next().getClass().getTypeName().equals("java.lang.String")) {
-            return createStringsArray(field.getName(), Arrays.toString(objects.toArray()));
+            return convertStringsArrayToString(field.getName(), Arrays.toString(objects.toArray()));
         }
         for (Object object : objects) {
             objectCounter++;
@@ -134,13 +182,27 @@ class JsonCreator {
         return String.format("\"%s\":[%s],", field.getName(), json);
     }
 
-    private String createPrimitive(String type, String value) {
+    /**
+     * Convert primitives types to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertPrimitivesToString(String type, String value) {
         String editType = String.format("\"%s\":", type);
-        String editValue = editValueToPrimitive(value + ",");
+        String editValue = convertValueToPrimitive(value + ",");
         return editType + editValue;
     }
 
-    private String createStringsArray(String type, String value) {
+    /**
+     * Convert strings array to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertStringsArrayToString(String type, String value) {
         List<String> temporary = new ArrayList<>();
         String[] subString;
         String delimeter = ",";
@@ -155,23 +217,32 @@ class JsonCreator {
         return result;
     }
 
+    /**
+     * Convert primitives array to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertPrimitivesArrayToString(String type, String value) {
+        String editType = String.format("\"%s\":", type);
+        String editValue = convertValueToString(value)
+                .replace("\"", "")
+                .replace(" ", "") + ",";
+        return editType + editValue;
+    }
+
     private String createString(String type, String value) {
         String editType = String.format("\"%s\":", type);
-        String editValue = editValueToString(value) + ",";
+        String editValue = convertValueToString(value) + ",";
         return editType + editValue;
     }
 
-    private String createPrimitivesArray(String type, String value) {
-        String editType = String.format("\"%s\":", type);
-        String editValue = editValueToString(value) + ",";
-        return editType + editValue;
-    }
-
-    private String editValueToPrimitive(String value) {
+    private String convertValueToPrimitive(String value) {
         return value.replace("\"", "").replace(" ", "");
     }
 
-    private String editValueToString(String value) {
+    private String convertValueToString(String value) {
         return String.format("\"%s\"", value);
     }
 
@@ -180,12 +251,12 @@ class JsonCreator {
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             Object fieldValue = field.get(object);
-            string.append(toJsonFormat(field, field.getName(), fieldValue.toString()));
+            string.append(convertToString(field, field.getName(), fieldValue.toString()));
         }
         return String.format("{%s}", removeCharInString(String.valueOf(string), string.length() - 1));
     }
 
-    private String parseArray(Object object, Field field) {
+    private String selectArrayType(Object object, Field field) {
         try {
             Object fieldValue = field.get(object);
             switch (field.getGenericType().getTypeName()) {

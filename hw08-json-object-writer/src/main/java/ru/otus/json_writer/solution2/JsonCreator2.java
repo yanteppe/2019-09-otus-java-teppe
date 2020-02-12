@@ -45,7 +45,7 @@ public class JsonCreator2 {
             Object fieldValue = field.get(object);
             if (isArrayPrimitivesOrStrings(field)) {
                 jsonString.append(convertToString(field, field.getName(), selectArrayType(object, field)));
-            } else if (isArrayOrListObject(object, field)) {
+            } else if (isArrayOrListObjects(object, field)) {
                 jsonString.append(convertToString(field, field.getName(), ""));
             } else if (isObject(field)) {
                 createJson(fieldValue);
@@ -65,16 +65,7 @@ public class JsonCreator2 {
      * @return boolean
      */
     private boolean isObject(Field field) {
-        if (field.getType().isPrimitive()) {
-            return false;
-        }
-        if (field.getType().getTypeName().equals("java.util.List")) {
-            return false;
-        }
-        if (field.getType().getTypeName().equals("java.lang.String")) {
-            return false;
-        }
-        return true;
+        return field.getGenericType().equals(field.getDeclaringClass());
     }
 
     /**
@@ -83,9 +74,9 @@ public class JsonCreator2 {
      * @param object object for Json
      * @return boolean
      */
-    private boolean isArrayOrListObject(Object object, Field field) {
+    private boolean isArrayOrListObjects(Object object, Field field) {
         List listObjects = null;
-        if (field.getType().getTypeName().equals("java.util.List") || field.getType().getTypeName().equals("java.lang.Object[]")) {
+        if (object.getClass().getCanonicalName().contains("Collections") || field.getType().getTypeName().equals("java.lang.Object[]")) {
             try {
                 Object fieldValue = field.get(object);
                 if (field.getType().getTypeName().equals("java.lang.Object[]")) {
@@ -96,7 +87,8 @@ public class JsonCreator2 {
                 if (listObjects.iterator().next().getClass().isPrimitive()) {
                     return false;
                 }
-                if (listObjects.iterator().next().getClass().getTypeName().equals("java.lang.String") && !field.getType().getTypeName().equals("java.util.List")) {
+                if (listObjects.iterator().next().getClass().getTypeName().equals("java.lang.String")
+                        && !field.getType().getTypeName().equals("java.util.List")) {
                     return false;
                 }
             } catch (IllegalAccessException e) {
@@ -115,8 +107,7 @@ public class JsonCreator2 {
      * @return boolean
      */
     private boolean isArrayPrimitivesOrStrings(Field field) {
-        return field.getType().getTypeName().contains("[]")
-                && !field.getType().getTypeName().contains("Object[]");
+        return field.getType().isArray() && !field.getType().getTypeName().contains("Object[]");
     }
 
     /**
@@ -256,24 +247,23 @@ public class JsonCreator2 {
     private String selectArrayType(Object object, Field field) {
         try {
             Object fieldValue = field.get(object);
-            switch (field.getGenericType().getTypeName()) {
-                case "byte[]":
-                    return Arrays.toString((byte[]) fieldValue);
-                case "short[]":
-                    return Arrays.toString((short[]) fieldValue);
-                case "int[]":
-                    return Arrays.toString((int[]) fieldValue);
-                case "long[]":
-                    return Arrays.toString((long[]) fieldValue);
-                case "double[]":
-                    return Arrays.toString((double[]) fieldValue);
-                case "char[]":
-                    return Arrays.toString((char[]) fieldValue);
-                case "java.lang.String[]":
-                    return Arrays.toString((String[]) fieldValue);
+            if (fieldValue.getClass().getComponentType().equals(byte.class)) {
+                return Arrays.toString((byte[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(short.class)) {
+                return Arrays.toString((short[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(int.class)) {
+                return Arrays.toString((int[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(long.class)) {
+                return Arrays.toString((long[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(double.class)) {
+                return Arrays.toString((double[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(char.class)) {
+                return Arrays.toString((char[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(String.class)) {
+                return Arrays.toString((String[]) fieldValue);
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
         }
         return null;
     }

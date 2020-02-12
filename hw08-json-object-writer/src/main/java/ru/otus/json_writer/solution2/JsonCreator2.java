@@ -1,4 +1,4 @@
-package ru.otus.json_writer;
+package ru.otus.json_writer.solution2;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -6,16 +6,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Class for creating Json
- */
-class JsonCreator {
+public class JsonCreator2 {
     private List<String> arrayTypes = Arrays.asList("byte[]", "short[]", "int[]", "long[]", "double[]");
     private StringBuilder jsonString = new StringBuilder();
     private int objectCounter = 0;
     private Object object;
 
-    JsonCreator() {
+    public JsonCreator2() {
         this.jsonString.append("{");
     }
 
@@ -25,7 +22,7 @@ class JsonCreator {
      * @param object some object
      * @return Json string
      */
-    String toJson(Object object) {
+    public String toJson(Object object) {
         this.object = object;
         try {
             return createJson(object);

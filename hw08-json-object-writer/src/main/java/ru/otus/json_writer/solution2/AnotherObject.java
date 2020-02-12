@@ -1,4 +1,4 @@
-package ru.otus.json_writer;
+package ru.otus.json_writer.solution2;
 
 import java.util.Random;
 

@@ -113,7 +113,6 @@ public class JsonCreator2 {
     /**
      * Convert object field to string
      *
-     * @param field object field
      * @param type  type field
      * @param value value field
      * @return String

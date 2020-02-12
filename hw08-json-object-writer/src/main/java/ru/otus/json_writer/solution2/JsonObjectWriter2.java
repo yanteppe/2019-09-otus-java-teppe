@@ -6,13 +6,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class JsonCreator2 {
+public class JsonObjectWriter2 {
     private List<String> arrayTypes = Arrays.asList("byte[]", "short[]", "int[]", "long[]", "double[]");
     private StringBuilder jsonString = new StringBuilder();
     private int objectCounter = 0;
     private Object object;
 
-    public JsonCreator2() {
+    public JsonObjectWriter2() {
         this.jsonString.append("{");
     }
 

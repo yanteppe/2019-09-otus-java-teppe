@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Class for creating Json
  */
-public class JsonCreator1 {
+public class JsonObjectWriter1 {
     private Object object;
 
     /**

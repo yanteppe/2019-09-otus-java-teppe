@@ -18,6 +18,7 @@
         <module>hw05-test-framework</module>
         <module>hw06-atm</module>
         <module>hw07-atm-department</module>
+        <module>hw09-homemade-orm</module>
     </modules>
 
     <properties>

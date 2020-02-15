@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Optional;
 
+// TODO: добавить генератор запросов для добовляемого объекта в БД (Через рефлексию)
 public class UserDaoJdbc implements UserDao {
     private static Logger logger = LogManager.getLogger(UserDaoJdbc.class);
     private final SessionManagerJdbc sessionManager;
@@ -27,7 +28,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public Optional<User> findById(long id) {
         try {
-            return dbExecutor.selectRecord(getConnection(), "select id, name from user where id  = ?", id, resultSet -> {
+            return dbExecutor.selectRecord(getConnection(), "select id, name from users where id  = ?", id, resultSet -> {
                 try {
                     if (resultSet.next()) {
                         return new User(resultSet.getLong("id"), resultSet.getString("name"));
@@ -46,7 +47,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public long saveUser(User user) {
         try {
-            return dbExecutor.insertRecord(getConnection(), "insert into user(name) values (?)", Collections.singletonList(user.getName()));
+            return dbExecutor.insertRecord(getConnection(), "insert into users(name) values (?)", Collections.singletonList(user.getName()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);

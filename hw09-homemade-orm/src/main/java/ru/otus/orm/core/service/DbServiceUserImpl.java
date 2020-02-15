@@ -23,7 +23,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             try {
                 long userId = userDao.saveUser(user);
                 sessionManager.commitSession();
-                logger.debug("created user: " + userId);
+                logger.debug("save user to DB with ID: " + userId);
                 return userId;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
@@ -39,7 +39,7 @@ public class DbServiceUserImpl implements DBServiceUser {
             sessionManager.beginSession();
             try {
                 Optional<User> userOptional = userDao.findById(id);
-                logger.info("user: " + userOptional.orElse(null));
+                logger.info("get user from DB with ID: " + userOptional.orElse(null));
                 return userOptional;
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

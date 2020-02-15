@@ -23,9 +23,7 @@ public class DbServiceDemo {
     public static void main(String[] args) throws Exception {
         DataSource dataSource = new DataSourceH2DB();
         DbServiceDemo demo = new DbServiceDemo();
-
         demo.createTable(dataSource);
-
         SessionManagerJdbc sessionManager = new SessionManagerJdbc(dataSource);
         DbExecutor<User> dbExecutor = new DbExecutor<>();
         UserDao userDao = new UserDaoJdbc(sessionManager, dbExecutor);
@@ -42,7 +40,7 @@ public class DbServiceDemo {
 
     private void createTable(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement pst = connection.prepareStatement("create table user(id long auto_increment, name varchar(50))")) {
+             PreparedStatement pst = connection.prepareStatement("create table users(id long auto_increment, name varchar(50))")) {
             pst.executeUpdate();
         }
         System.out.println("table created");

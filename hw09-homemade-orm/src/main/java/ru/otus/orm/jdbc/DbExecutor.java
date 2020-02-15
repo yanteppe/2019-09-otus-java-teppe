@@ -1,6 +1,5 @@
 package ru.otus.orm.jdbc;
 
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -9,6 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * Class executor of queries to the database
+ *
+ * @param <T>
+ */
 public class DbExecutor<T> {
     private static Logger logger = LogManager.getLogger(DbExecutor.class);
 

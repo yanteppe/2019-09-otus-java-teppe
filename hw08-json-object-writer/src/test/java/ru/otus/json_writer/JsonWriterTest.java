@@ -14,12 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JsonWriterTest {
-    private Gson gson;
-
-    @BeforeEach
-    void preconditions() {
-        gson = new Gson();
-    }
+    private Gson gson = new Gson();
 
     @Test
     @DisplayName("Solution 1 test")

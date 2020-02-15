@@ -40,7 +40,7 @@ public class JsonObjectWriter1 {
             if (field.getType().isPrimitive() && !object.getClass().getCanonicalName().contains("Collections")) {
                 return convertObjectToPrimitive(object);
             }
-            if (object.getClass().getCanonicalName().contains("Collections")) {
+            if (Iterable.class.isAssignableFrom(object.getClass())) {
                 return object.toString().replace(" ", "");
             }
             if (object.getClass().getTypeName().equals("java.lang.String")) {

@@ -31,7 +31,7 @@ public class DbServiceDemo {
         long id = dbServiceUser.saveUser(new User(0, "dbServiceUser"));
         Optional<User> user = dbServiceUser.getUser(id);
 
-        System.out.println(user);
+        System.out.println("User in DB: " + user);
         user.ifPresentOrElse(
                 crUser -> logger.info("created user, name: " + crUser.getName()),
                 () -> logger.info("user was not created")
@@ -40,7 +40,7 @@ public class DbServiceDemo {
 
     private void createTable(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement pst = connection.prepareStatement("create table users(id long auto_increment, name varchar(50))")) {
+             PreparedStatement pst = connection.prepareStatement("create table user (id bigint(20) not null auto_increment, name varchar(50))")) {
             pst.executeUpdate();
         }
         System.out.println("table created");

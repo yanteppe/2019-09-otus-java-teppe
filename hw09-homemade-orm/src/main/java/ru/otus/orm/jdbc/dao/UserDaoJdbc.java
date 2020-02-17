@@ -28,18 +28,18 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public Optional<User> findById(long id) {
         try {
-            return dbExecutor.selectRecord(getConnection(), "select id, name from users where id  = ?", id, resultSet -> {
+            return dbExecutor.selectRecord(getConnection(), "select id, name from user where id  = ?", id, resultSet -> {
                 try {
                     if (resultSet.next()) {
                         return new User(resultSet.getLong("id"), resultSet.getString("name"));
                     }
-                } catch (SQLException e) {
-                    logger.error(e.getMessage(), e);
+                } catch (SQLException exception) {
+                    logger.error(exception.getMessage(), exception);
                 }
                 return null;
             });
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+        } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
         }
         return Optional.empty();
     }
@@ -47,7 +47,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public long saveUser(User user) {
         try {
-            return dbExecutor.insertRecord(getConnection(), "insert into users(name) values (?)", Collections.singletonList(user.getName()));
+            return dbExecutor.insertRecord(getConnection(), "insert into user(name) values (?)", Collections.singletonList(user.getName()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new UserDaoException(e);

@@ -1,6 +1,12 @@
 package ru.otus.orm.jdbc.helper;
 
-import ru.otus.orm.jdbc.helper.ObjectDataCollector;
+
+import ru.otus.orm.core.Id;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Database Query Creator
@@ -9,38 +15,73 @@ import ru.otus.orm.jdbc.helper.ObjectDataCollector;
  */
 public class DbQueryCreator<T> {
     private ObjectDataCollector objDataCollector;
-    private StringBuilder insertQuery;
-    private StringBuilder updateQuery;
-    private StringBuilder selectQuery;
-
-    public DbQueryCreator() {
-        this.objDataCollector = new ObjectDataCollector();
-    }
 
     public String createInsertQuery(T objectData) {
-        String tableName = objectData.getClass().getName();
-//        insertQuery = new StringBuilder();
-//        insertQuery
-//                .append("INSERT ")
-//                .append("INTO ")
-//                .append(tableName).append(" ")
-//                .append("VALUES")
-        return "";
+        objDataCollector = new ObjectDataCollector();
+        var values = new StringBuilder();
+        values.append(objDataCollector.collectObjectData(objectData));
+        var tableName = objectData.getClass().getSimpleName();
+        var insertQuery = new StringBuilder();
+        insertQuery
+                .append("INSERT ")
+                .append("INTO ")
+                .append(tableName).append(" ")
+                .append("VALUES ")
+                .append(String.format("(%s);", values));
+        return insertQuery.toString();
     }
 
     public String createUpdateQuery(T objectData) {
-
-
-        return "";
+        objDataCollector = new ObjectDataCollector();
+        objDataCollector.collectObjectData(objectData);
+        List<Field> fields = objDataCollector.getObjectFields();
+        List<String> values = objDataCollector.getFieldsValues();
+        var tableName = objectData.getClass().getSimpleName();
+        Field annotatedField = null;
+        String annotatedFieldValue = null;
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isAnnotationPresent(Id.class)) {
+                annotatedField = fields.remove(i);
+                annotatedFieldValue = values.get(i);
+                values.remove(i);
+            }
+        }
+        var updateQuery = new StringBuilder().append("UPDATE ").append(tableName).append(" ").append("SET ");
+        for (int i = 0; i < values.size(); i++) {
+            updateQuery.append(fields.get(i).getName()).append(" = ").append(values.get(i));
+        }
+        removeLastCommaInString(updateQuery)
+                .append(" WHERE ").append(Objects.requireNonNull(annotatedField).getName()).append(" = ")
+                .append(annotatedFieldValue)
+                .append(";");
+        return removeLastCommaInString(updateQuery).toString();
     }
 
     public String createSelectQuery(T objectData) {
-
-        return "";
+        objDataCollector = new ObjectDataCollector();
+        objDataCollector.collectObjectData(objectData);
+        List<Field> fields = objDataCollector.getObjectFields();
+        List<String> values = objDataCollector.getFieldsValues();
+        var tableName = objectData.getClass().getSimpleName();
+        Field annotatedField = null;
+        String annotatedFieldValue = null;
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isAnnotationPresent(Id.class)) {
+                annotatedField = fields.remove(i);
+                annotatedFieldValue = values.get(i);
+                values.remove(i);
+            }
+        }
+        var selectQuery = new StringBuilder()
+                .append("SELECT FROM ").append(tableName)
+                .append(" WHERE ")
+                .append(Objects.requireNonNull(annotatedField).getName())
+                .append(" = ").append(annotatedFieldValue);
+        return removeLastCommaInString(selectQuery).toString();
     }
 
-//    public <T> T load(long id, Class<T> clazz) {
-//
-//        return null;
-//    }
+    private StringBuilder removeLastCommaInString(StringBuilder updateQuery) {
+        int lastCommaIndex = updateQuery.lastIndexOf(",");
+        return updateQuery.deleteCharAt(lastCommaIndex);
+    }
 }

@@ -2,58 +2,308 @@ package ru.otus.orm.jdbc.helper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-/**
- * Parse object fields
- */
 public class ObjectDataCollector {
+    private List<String> arrayTypes = Arrays.asList("byte[]", "short[]", "int[]", "long[]", "double[]");
     private List<Field> fields;
-    private List<Field> annotatedFields;
+    private List<String> fieldsValues;
+    private StringBuilder queryString = new StringBuilder();
+    private int objectCounter = 0;
+    private Object object;
 
     public ObjectDataCollector() {
         this.fields = new ArrayList<>();
+        this.fieldsValues = new ArrayList<>();
     }
 
-    public void parse(Object object) {
-        collectFields(object);
+    /**
+     * Create string values from object fields
+     *
+     * @param object some object
+     * @return string of object fields values
+     */
+    public String collectObjectData(Object object) {
+        this.object = object;
+        try {
+            return collectObjectFields(object);
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+            return null;
+        }
     }
 
-    public List<Field> getFields() {
+    /**
+     * Collect fields values from object fields
+     *
+     * @param object object for collecting fields data
+     * @return object fields values
+     * @throws IllegalAccessException IllegalAccessException
+     */
+    private String collectObjectFields(Object object) throws IllegalAccessException {
+        for (Field field : object.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            Object fieldValue = field.get(object);
+            if (isArrayPrimitivesOrStrings(field)) {
+                String value = convertToString(field, field.getName(), selectArrayType(object, field));
+                queryString.append(value);
+                fieldsValues.add(value);
+                fields.add(field);
+            } else if (isArrayOrListObjects(object, field)) {
+                String value = convertToString(field, field.getName(), "");
+                queryString.append(value);
+                fieldsValues.add(value);
+                fields.add(field);
+            } else if (isObject(field)) {
+                String value = collectObjectFields(fieldValue);
+                fieldsValues.add(value);
+                fields.add(field);
+            } else {
+                String value = convertToString(field, field.getName(), fieldValue.toString());
+                queryString.append(value);
+                fieldsValues.add(value);
+                fields.add(field);
+            }
+        }
+        return removeLastCommaInString(queryString.toString());
+    }
+
+    private String removeLastCommaInString(String string) {
+        int charIndex = string.lastIndexOf(',');
+        return string.substring(0, charIndex) + string.substring(charIndex + 1);
+    }
+
+    /**
+     * Use after calling method collectObjectData()
+     *
+     * @return List object fields
+     */
+    public List<Field> getObjectFields() {
         return fields;
     }
 
-    public List<Field> getAnnotatedFields() {
-        return annotatedFields;
+    /**
+     * Use after calling method collectObjectData()
+     *
+     * @return List object fields values
+     */
+    public List<String> getFieldsValues() {
+        return fieldsValues;
     }
 
-    public String getFieldValue(Object object, Field field) {
+    /**
+     * Check object field is Object or not
+     *
+     * @param field object field
+     * @return boolean
+     */
+    private boolean isObject(Field field) {
+        return field.getGenericType().equals(field.getDeclaringClass());
+    }
+
+    /**
+     * Check object field is array or list
+     *
+     * @param object object
+     * @return boolean
+     */
+    private boolean isArrayOrListObjects(Object object, Field field) {
+        List listObjects = null;
+        if (object.getClass().getCanonicalName().contains("Collections") || field.getType().getTypeName().equals("java.lang.Object[]")) {
+            try {
+                Object fieldValue = field.get(object);
+                if (field.getType().getTypeName().equals("java.lang.Object[]")) {
+                    listObjects = getListInsteadArray((Object[]) fieldValue);
+                } else {
+                    listObjects = (List) fieldValue;
+                }
+                if (listObjects.iterator().next().getClass().isPrimitive()) {
+                    return false;
+                }
+                if (listObjects.iterator().next().getClass().getTypeName().equals("java.lang.String")
+                        && !field.getType().getTypeName().equals("java.util.List")) {
+                    return false;
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check object field is primitives array or strings array
+     *
+     * @param field object field
+     * @return boolean
+     */
+    private boolean isArrayPrimitivesOrStrings(Field field) {
+        return field.getType().isArray() && !field.getType().getTypeName().contains("Object[]");
+    }
+
+    /**
+     * Convert object field to string
+     *
+     * @param type  type field
+     * @param value value field
+     * @return String
+     * @throws IllegalAccessException IllegalAccessException
+     */
+    private String convertToString(Field field, String type, String value) throws IllegalAccessException {
+        if (field.getType().isPrimitive() && !field.getType().getTypeName().equals("char")) {
+            return convertPrimitivesToString(type, value);
+        } else if (!field.getType().isArray() && field.getType().getTypeName().contains("char")) {
+            return createString(type, value);
+        } else if (!field.getType().isArray() && field.getType().getTypeName().contains("String")) {
+            return createString(type, value);
+        } else if (field.getType().isArray() && field.getType().getTypeName().contains("String")) {
+            return convertStringsArrayToString(type, value);
+        } else if (field.getType().isArray() && arrayTypes.contains(field.getType().getTypeName())) {
+            return convertPrimitivesArrayToString(type, value);
+        } else if (field.getType().getTypeName().contains("char[]")) {
+            return convertStringsArrayToString(type, value);
+        } else if (field.getType().getTypeName().contains("List") || field.getType().getTypeName().contains("Object[]")) {
+            return convertListObjectsToString(field);
+        }
+        return null;
+    }
+
+    /**
+     * Convert list objects to string
+     *
+     * @param field object field
+     * @return string
+     * @throws IllegalAccessException IllegalAccessException
+     */
+    private String convertListObjectsToString(Field field) throws IllegalAccessException {
+        StringBuilder string = new StringBuilder();
         field.setAccessible(true);
-        Object fieldValue = null;
+        Object fieldValue = field.get(object);
+        List objects = null;
+        if (field.getType().getTypeName().equals("java.lang.Object[]")) {
+            objects = getListInsteadArray((Object[]) fieldValue);
+        } else {
+            objects = (List) fieldValue;
+        }
+        if (objects.iterator().next().getClass().getTypeName().equals("java.lang.String")) {
+            return convertStringsArrayToString(field.getName(), Arrays.toString(objects.toArray()));
+        }
+        for (Object object : objects) {
+            objectCounter++;
+            if (objectCounter != objects.size()) {
+                string.append(parseObject(object)).append(",");
+            } else {
+                string.append(parseObject(object));
+            }
+        }
+        objectCounter = 0;
+        return String.format("\"%s\":[%s],", field.getName(), string);
+    }
+
+    /**
+     * Convert primitives types to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertPrimitivesToString(String type, String value) {
+        String editValue = convertValueToPrimitive(value + ",");
+        return editValue;
+    }
+
+    /**
+     * Convert strings array to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertStringsArrayToString(String type, String value) {
+        List<String> temporary = new ArrayList<>();
+        String[] subString;
+        String delimeter = ",";
+        subString = value.split(delimeter);
+        for (String str : subString) {
+            String string = str.replace("[", "").replace("]", "").trim();
+            String editString = String.format("\"%s\"", string);
+            temporary.add(editString);
+        }
+        return Arrays.toString(temporary.toArray()).replace(" ", "") + ",";
+    }
+
+    /**
+     * Convert primitives array to string
+     *
+     * @param type  object field type
+     * @param value value field
+     * @return string
+     */
+    private String convertPrimitivesArrayToString(String type, String value) {
+        String editValue = convertValueToString(value)
+                .replace("\"", "")
+                .replace(" ", "") + ",";
+        return editValue;
+    }
+
+    private String createString(String type, String value) {
+        String editValue = convertValueToString(value) + ",";
+        return editValue;
+    }
+
+    private String convertValueToPrimitive(String value) {
+        return value.replace("\'", "").replace(" ", "");
+    }
+
+    private String convertValueToString(String value) {
+        return String.format("'%s'", value);
+    }
+
+    private String parseObject(Object object) throws IllegalAccessException {
+        StringBuilder string = new StringBuilder();
+        for (Field field : object.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            Object fieldValue = field.get(object);
+            string.append(convertToString(field, field.getName(), fieldValue.toString()));
+        }
+        return String.format("{%s}", removeCharInString(String.valueOf(string), string.length() - 1));
+    }
+
+    private String selectArrayType(Object object, Field field) {
         try {
-            fieldValue = field.get(object);
+            Object fieldValue = field.get(object);
+            if (fieldValue.getClass().getComponentType().equals(byte.class)) {
+                return Arrays.toString((byte[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(short.class)) {
+                return Arrays.toString((short[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(int.class)) {
+                return Arrays.toString((int[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(long.class)) {
+                return Arrays.toString((long[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(double.class)) {
+                return Arrays.toString((double[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(char.class)) {
+                return Arrays.toString((char[]) fieldValue);
+            } else if (fieldValue.getClass().getComponentType().equals(String.class)) {
+                return Arrays.toString((String[]) fieldValue);
+            }
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
         }
-        return Objects.requireNonNull(fieldValue).toString();
+        return null;
     }
 
-    private void collectFields(Object object) {
-        Collections.addAll(fields, object.getClass().getDeclaredFields());
-        collectAnnotatedFields(object);
+    private String removeCharInString(String s, int pos) {
+        return s.substring(0, pos) + s.substring(pos + 1);
     }
 
-    private void collectAnnotatedFields(Object object) {
-        for (Field field : object.getClass().getDeclaredFields()) {
-            if (isAnnotatedField(field)) {
-                annotatedFields.add(field);
-            }
-        }
-    }
-
-    private boolean isAnnotatedField(Field field) {
-        return field.getAnnotations().length > 0;
+    private List getListInsteadArray(Object[] objects) {
+        List result = new ArrayList();
+        Collections.addAll(result, objects);
+        return result;
     }
 }

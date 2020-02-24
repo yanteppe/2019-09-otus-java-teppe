@@ -45,8 +45,8 @@ public class SessionManagerJdbc implements SessionManager {
         checkConnection();
         try {
             connection.rollback();
-        } catch (SQLException e) {
-            throw new SessionManagerException(e);
+        } catch (SQLException sqlException) {
+            throw new SessionManagerException(sqlException);
         }
     }
 
@@ -55,8 +55,8 @@ public class SessionManagerJdbc implements SessionManager {
         checkConnection();
         try {
             connection.close();
-        } catch (SQLException e) {
-            throw new SessionManagerException(e);
+        } catch (SQLException sqlException) {
+            throw new SessionManagerException(sqlException);
         }
     }
 
@@ -71,8 +71,8 @@ public class SessionManagerJdbc implements SessionManager {
             if (connection == null || !connection.isValid(TIMEOUT_IN_SECONDS)) {
                 throw new SessionManagerException("Connection is invalid");
             }
-        } catch (SQLException ex) {
-            throw new SessionManagerException(ex);
+        } catch (SQLException sqlException) {
+            throw new SessionManagerException(sqlException);
         }
     }
 }

@@ -21,14 +21,30 @@ public class DbServiceUserImpl implements DBServiceUser {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                long userId = userDao.saveUser(user);
+                long userRecordId = userDao.saveUser(user);
                 sessionManager.commitSession();
-                logger.debug("save user to DB with ID: " + userId);
-                return userId;
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                logger.info("Save User to DB with record ID: " + userRecordId);
+                return userRecordId;
+            } catch (Exception exception) {
+                logger.error(exception.getMessage(), exception);
                 sessionManager.rollbackSession();
-                throw new DbServiceException(e);
+                throw new DbServiceException(exception);
+            }
+        }
+    }
+
+    @Override
+    public void updateUser(User user) {
+        try (SessionManager sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                userDao.updateUser(user);
+                sessionManager.commitSession();
+                logger.info("Update User to: " + user.toString());
+            } catch (Exception exception) {
+                logger.error(exception.getMessage(), exception);
+                sessionManager.rollbackSession();
+                throw new DbServiceException(exception);
             }
         }
     }
@@ -39,10 +55,10 @@ public class DbServiceUserImpl implements DBServiceUser {
             sessionManager.beginSession();
             try {
                 Optional<User> userOptional = userDao.findById(id);
-                logger.info("get user from DB with ID: " + userOptional.orElse(null));
+                logger.info("Get User from DB by ID: " + userOptional.orElse(null));
                 return userOptional;
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+            } catch (Exception exception) {
+                logger.error(exception.getMessage(), exception);
                 sessionManager.rollbackSession();
             }
             return Optional.empty();

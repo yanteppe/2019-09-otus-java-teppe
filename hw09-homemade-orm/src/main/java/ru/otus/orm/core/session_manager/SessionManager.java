@@ -2,13 +2,13 @@ package ru.otus.orm.core.session_manager;
 
 public interface SessionManager extends AutoCloseable {
 
-  void beginSession();
+    void beginSession();
 
-  void commitSession();
+    void commitSession();
 
-  void rollbackSession();
+    void rollbackSession();
 
-  void close();
+    void close();
 
-  DatabaseSession getCurrentSession();
+    DatabaseSession getCurrentSession();
 }

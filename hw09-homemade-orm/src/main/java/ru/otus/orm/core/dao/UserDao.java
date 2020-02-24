@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    Optional<User> findById(long id);
-
     long saveUser(User user);
+
+    void updateUser(User user);
+
+    Optional<User> findById(long id);
 
     SessionManager getSessionManager();
 }

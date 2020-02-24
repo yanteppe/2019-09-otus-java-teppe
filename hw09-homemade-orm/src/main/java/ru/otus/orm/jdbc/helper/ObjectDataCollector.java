@@ -1,6 +1,7 @@
 package ru.otus.orm.jdbc.helper;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -155,25 +156,46 @@ public class ObjectDataCollector {
      */
     private String convertToString(Field field, String type, String value) throws IllegalAccessException {
         if (field.getType().isPrimitive() && !field.getType().getTypeName().equals("char")) {
-            return convertPrimitivesToString(type, value);
+            return convertPrimitivesToString(value);
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("char")) {
-            return createString(type, value);
+            return createString(value);
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("String")) {
-            return createString(type, value);
+            return createString(value);
         } else if (field.getType().isArray() && field.getType().getTypeName().contains("String")) {
-            return convertStringsArrayToString(type, value);
+            return convertStringsArrayToString(value);
         } else if (field.getType().isArray() && arrayTypes.contains(field.getType().getTypeName())) {
-            return convertPrimitivesArrayToString(type, value);
+            return convertPrimitivesArrayToString(value);
         } else if (field.getType().getTypeName().contains("char[]")) {
-            return convertStringsArrayToString(type, value);
+            return convertStringsArrayToString(value);
         } else if (field.getType().getTypeName().contains("List") || field.getType().getTypeName().contains("Object[]")) {
             return convertListObjectsToString(field);
+        } else if (field.getType().equals(BigDecimal.class)) {
+            return convertBigDecimalToString(field);
         }
         return null;
     }
 
     /**
-     * Convert list objects to string
+     * Convert BigDecimal to String
+     *
+     * @param field object field
+     * @return string
+     */
+    private String convertBigDecimalToString(Field field) {
+        String convertedValue = null;
+        field.setAccessible(true);
+        try {
+            Object fieldValue = field.get(object);
+            BigDecimal value = (BigDecimal) fieldValue;
+            convertedValue = value.toString();
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+        return convertedValue;
+    }
+
+    /**
+     * Convert list objects to String
      *
      * @param field object field
      * @return string
@@ -190,7 +212,7 @@ public class ObjectDataCollector {
             objects = (List) fieldValue;
         }
         if (objects.iterator().next().getClass().getTypeName().equals("java.lang.String")) {
-            return convertStringsArrayToString(field.getName(), Arrays.toString(objects.toArray()));
+            return convertStringsArrayToString(Arrays.toString(objects.toArray()));
         }
         for (Object object : objects) {
             objectCounter++;
@@ -207,11 +229,10 @@ public class ObjectDataCollector {
     /**
      * Convert primitives types to string
      *
-     * @param type  object field type
      * @param value value field
      * @return string
      */
-    private String convertPrimitivesToString(String type, String value) {
+    private String convertPrimitivesToString(String value) {
         String editValue = convertValueToPrimitive(value + ",");
         return editValue;
     }
@@ -219,11 +240,10 @@ public class ObjectDataCollector {
     /**
      * Convert strings array to string
      *
-     * @param type  object field type
      * @param value value field
      * @return string
      */
-    private String convertStringsArrayToString(String type, String value) {
+    private String convertStringsArrayToString(String value) {
         List<String> temporary = new ArrayList<>();
         String[] subString;
         String delimeter = ",";
@@ -239,18 +259,17 @@ public class ObjectDataCollector {
     /**
      * Convert primitives array to string
      *
-     * @param type  object field type
      * @param value value field
      * @return string
      */
-    private String convertPrimitivesArrayToString(String type, String value) {
+    private String convertPrimitivesArrayToString(String value) {
         String editValue = convertValueToString(value)
                 .replace("\"", "")
                 .replace(" ", "") + ",";
         return editValue;
     }
 
-    private String createString(String type, String value) {
+    private String createString(String value) {
         String editValue = convertValueToString(value) + ",";
         return editValue;
     }
@@ -297,8 +316,8 @@ public class ObjectDataCollector {
         return null;
     }
 
-    private String removeCharInString(String s, int pos) {
-        return s.substring(0, pos) + s.substring(pos + 1);
+    private String removeCharInString(String string, int pos) {
+        return string.substring(0, pos) + string.substring(pos + 1);
     }
 
     private List getListInsteadArray(Object[] objects) {

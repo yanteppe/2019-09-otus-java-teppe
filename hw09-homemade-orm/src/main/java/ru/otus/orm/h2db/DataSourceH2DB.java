@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 public class DataSourceH2DB implements DataSource {
-    private static final String URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
+    private static final String URL = "jdbc:h2:mem:H2DB;DB_CLOSE_DELAY=-1";
 
     @Override
     public Connection getConnection() throws SQLException {

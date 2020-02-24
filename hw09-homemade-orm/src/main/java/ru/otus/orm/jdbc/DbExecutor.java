@@ -9,37 +9,51 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Class executor of queries to the database
+ * Class executor of statement to the database
  *
- * @param <T>
+ * @param <T> object for database
  */
 public class DbExecutor<T> {
     private static Logger logger = LogManager.getLogger(DbExecutor.class);
 
-    public long insertRecord(Connection connection, String sql, List<String> params) throws SQLException {
+    public long insertRecord(Connection connection, String sqlStatement, List<String> params) throws SQLException {
         Savepoint savePoint = connection.setSavepoint("savePointName");
-        try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            for (int idx = 0; idx < params.size(); idx++) {
-                pst.setString(idx + 1, params.get(idx));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < params.size(); i++) {
+                preparedStatement.setString(i + 1, params.get(i));
             }
-            pst.executeUpdate();
-            try (ResultSet rs = pst.getGeneratedKeys()) {
-                rs.next();
-                return rs.getInt(1);
+            preparedStatement.executeUpdate();
+            try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                resultSet.next();
+                return resultSet.getInt(1);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException sqlException) {
             connection.rollback(savePoint);
-            logger.error(ex.getMessage(), ex);
-            throw ex;
+            logger.error(sqlException.getMessage(), sqlException);
+            throw sqlException;
         }
     }
 
-    public Optional<T> selectRecord(Connection connection, String sql, long id, Function<ResultSet, T> rsHandler) throws SQLException {
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setLong(1, id);
-            try (ResultSet rs = pst.executeQuery()) {
-                return Optional.ofNullable(rsHandler.apply(rs));
+    public Optional<T> selectRecord(Connection connection, String sql, long id, Function<ResultSet, T> resultSetHandler) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return Optional.ofNullable(resultSetHandler.apply(resultSet));
             }
+        }
+    }
+
+    public void updateRecord(Connection connection, String sqlStatement, List<String> params) throws SQLException {
+        Savepoint savePoint = connection.setSavepoint("savePointName");
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < params.size(); i++) {
+                preparedStatement.setString(i + 1, params.get(i));
+            }
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            connection.rollback(savePoint);
+            logger.error(sqlException.getMessage(), sqlException);
+            throw sqlException;
         }
     }
 }

@@ -4,8 +4,11 @@ import ru.otus.orm.core.Id;
 
 public class User {
     @Id
-    private final long id;
-    private final String name;
+    private long id;
+    private String name;
+
+    public User() {
+    }
 
     public User(long id, String name) {
         this.id = id;
@@ -18,6 +21,14 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

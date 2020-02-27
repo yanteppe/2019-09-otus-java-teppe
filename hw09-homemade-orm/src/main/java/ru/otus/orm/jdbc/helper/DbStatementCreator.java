@@ -5,9 +5,9 @@ import ru.otus.orm.core.Id;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * Database Statement Creator
@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public class DbStatementCreator<T> {
     private ObjectDataCollector objectDataCollector;
-    StringBuilder stringValues;
+    StringJoiner values;
     List<String> listValues;
 
     public List<String> getListValues() {
@@ -33,7 +33,6 @@ public class DbStatementCreator<T> {
         objectDataCollector.collectObjectData(objectData);
         List<Field> fields = objectDataCollector.getObjectFields();
         listValues = objectDataCollector.getFieldsValues();
-//        List<String> listValues = objectDataCollector.getFieldsValues();
         var tableName = objectData.getClass().getSimpleName();
         var insertStatement = new StringBuilder();
         // delete item with Id annotation
@@ -44,33 +43,33 @@ public class DbStatementCreator<T> {
             }
         }
         // create string values
-        stringValues = new StringBuilder();
+        values = new StringJoiner(",");
         for (String value : listValues) {
-            stringValues.append("?").append(",");
-//            stringValues.append(value);
+            values.add("?");
         }
-        removeLastCommaInString(stringValues);
         // create insert statement
         insertStatement
                 .append("INSERT ")
                 .append("INTO ")
                 .append(tableName)
                 .append("(");
+        var fieldsNames = new StringJoiner(",");
         for (Field field : fields) {
-            insertStatement.append(field.getName()).append(",");
+            fieldsNames.add(field.getName());
         }
-        removeLastCommaInString(insertStatement)
+        insertStatement
+                .append(fieldsNames)
                 .append(")")
                 .append(" VALUES ")
                 .append("(")
-                .append(stringValues)
+                .append(values)
                 .append(")");
         return insertStatement.toString();
     }
 
     public String createSelectStatement(Class<T> clazz) {
         checkForNull(clazz);
-        List<Field> fields = Arrays.asList(clazz.getDeclaredFields());
+        Field[] fields = clazz.getDeclaredFields();
         var tableName = clazz.getSimpleName();
         String annotatedField = null;
         for (Field field : fields) {
@@ -107,18 +106,15 @@ public class DbStatementCreator<T> {
             }
         }
         var updateStatement = new StringBuilder().append("UPDATE ").append(tableName).append(" ").append("SET ");
+        var fieldsNames = new StringJoiner(",");
         for (int i = 0; i < listValues.size(); i++) {
-            updateStatement.append(fields.get(i).getName()).append(" = ").append("?, ");
+            fieldsNames.add(fields.get(i).getName() + "= " + "?");
         }
-        removeLastCommaInString(updateStatement)
+        updateStatement
+                .append(fieldsNames)
                 .append(" WHERE ").append(Objects.requireNonNull(annotatedField).getName()).append(" = ")
                 .append(annotatedFieldValue)
                 .append(";");
-        return removeLastCommaInString(updateStatement).toString();
-    }
-
-    private StringBuilder removeLastCommaInString(StringBuilder statement) {
-        int lastCommaIndex = statement.lastIndexOf(",");
-        return statement.deleteCharAt(lastCommaIndex);
+        return updateStatement.deleteCharAt(updateStatement.lastIndexOf(",")).toString();
     }
 }

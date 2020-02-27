@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ObjectDataCollector {
+    private static final String OBJECT_TYPE = "java.lang.Object[]";
     private List<String> arrayTypes = Arrays.asList("byte[]", "short[]", "int[]", "long[]", "double[]");
     private List<Field> fields;
     private List<String> fieldsValues;
@@ -24,15 +25,13 @@ public class ObjectDataCollector {
      * Create string values from object fields
      *
      * @param object some object
-     * @return string of object fields values
      */
-    public String collectObjectData(Object object) {
+    public void collectObjectData(Object object) {
         this.object = object;
         try {
-            return collectObjectFields(object);
+            collectObjectFields(object);
         } catch (IllegalAccessException exception) {
             exception.printStackTrace();
-            return null;
         }
     }
 
@@ -48,12 +47,12 @@ public class ObjectDataCollector {
             field.setAccessible(true);
             Object fieldValue = field.get(object);
             if (isArrayPrimitivesOrStrings(field)) {
-                String value = convertToString(field, field.getName(), selectArrayType(object, field));
+                String value = convertToString(field, selectArrayType(object, field));
                 queryString.append(value);
                 fieldsValues.add(value);
                 fields.add(field);
             } else if (isArrayOrListObjects(object, field)) {
-                String value = convertToString(field, field.getName(), "");
+                String value = convertToString(field, "");
                 queryString.append(value);
                 fieldsValues.add(value);
                 fields.add(field);
@@ -62,7 +61,7 @@ public class ObjectDataCollector {
                 fieldsValues.add(value);
                 fields.add(field);
             } else {
-                String value = convertToString(field, field.getName(), fieldValue.toString());
+                String value = convertToString(field, fieldValue.toString());
                 queryString.append(value);
                 fieldsValues.add(value);
                 fields.add(field);
@@ -111,14 +110,14 @@ public class ObjectDataCollector {
      * @return boolean
      */
     private boolean isArrayOrListObjects(Object object, Field field) {
-        List listObjects = null;
-        if (object.getClass().getCanonicalName().contains("Collections") || field.getType().getTypeName().equals("java.lang.Object[]")) {
+        List<?> listObjects = null;
+        if (object.getClass().getCanonicalName().contains("Collections") || field.getType().getTypeName().equals(OBJECT_TYPE)) {
             try {
                 Object fieldValue = field.get(object);
-                if (field.getType().getTypeName().equals("java.lang.Object[]")) {
+                if (field.getType().getTypeName().equals(OBJECT_TYPE)) {
                     listObjects = getListInsteadArray((Object[]) fieldValue);
                 } else {
-                    listObjects = (List) fieldValue;
+                    listObjects = (List<?>) fieldValue;
                 }
                 if (listObjects.iterator().next().getClass().isPrimitive()) {
                     return false;
@@ -149,18 +148,17 @@ public class ObjectDataCollector {
     /**
      * Convert object field to string
      *
-     * @param type  type field
      * @param value value field
      * @return String
      * @throws IllegalAccessException IllegalAccessException
      */
-    private String convertToString(Field field, String type, String value) throws IllegalAccessException {
+    private String convertToString(Field field, String value) throws IllegalAccessException {
         if (field.getType().isPrimitive() && !field.getType().getTypeName().equals("char")) {
             return convertPrimitivesToString(value);
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("char")) {
-            return createString(value);
+            return value + ",";
         } else if (!field.getType().isArray() && field.getType().getTypeName().contains("String")) {
-            return createString(value);
+            return value + ",";
         } else if (field.getType().isArray() && field.getType().getTypeName().contains("String")) {
             return convertStringsArrayToString(value);
         } else if (field.getType().isArray() && arrayTypes.contains(field.getType().getTypeName())) {
@@ -205,21 +203,21 @@ public class ObjectDataCollector {
         StringBuilder string = new StringBuilder();
         field.setAccessible(true);
         Object fieldValue = field.get(object);
-        List objects = null;
-        if (field.getType().getTypeName().equals("java.lang.Object[]")) {
+        List<?> objects = null;
+        if (field.getType().getTypeName().equals(OBJECT_TYPE)) {
             objects = getListInsteadArray((Object[]) fieldValue);
         } else {
-            objects = (List) fieldValue;
+            objects = (List<?>) fieldValue;
         }
         if (objects.iterator().next().getClass().getTypeName().equals("java.lang.String")) {
             return convertStringsArrayToString(Arrays.toString(objects.toArray()));
         }
-        for (Object object : objects) {
+        for (Object element : objects) {
             objectCounter++;
             if (objectCounter != objects.size()) {
-                string.append(parseObject(object)).append(",");
+                string.append(parseObject(element)).append(",");
             } else {
-                string.append(parseObject(object));
+                string.append(parseObject(element));
             }
         }
         objectCounter = 0;
@@ -233,8 +231,7 @@ public class ObjectDataCollector {
      * @return string
      */
     private String convertPrimitivesToString(String value) {
-        String editValue = convertValueToPrimitive(value + ",");
-        return editValue;
+        return convertValueToPrimitive(value + ",");
     }
 
     /**
@@ -263,23 +260,13 @@ public class ObjectDataCollector {
      * @return string
      */
     private String convertPrimitivesArrayToString(String value) {
-        String editValue = convertValueToString(value)
+        return value
                 .replace("\"", "")
                 .replace(" ", "") + ",";
-        return editValue;
-    }
-
-    private String createString(String value) {
-        String editValue = convertValueToString(value) + ",";
-        return editValue;
     }
 
     private String convertValueToPrimitive(String value) {
         return value.replace("\'", "").replace(" ", "");
-    }
-
-    private String convertValueToString(String value) {
-        return String.format("'%s'", value);
     }
 
     private String parseObject(Object object) throws IllegalAccessException {
@@ -287,7 +274,7 @@ public class ObjectDataCollector {
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             Object fieldValue = field.get(object);
-            string.append(convertToString(field, field.getName(), fieldValue.toString()));
+            string.append(convertToString(field, fieldValue.toString()));
         }
         return String.format("{%s}", removeCharInString(String.valueOf(string), string.length() - 1));
     }

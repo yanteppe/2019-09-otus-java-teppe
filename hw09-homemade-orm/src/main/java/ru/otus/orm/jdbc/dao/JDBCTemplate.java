@@ -13,21 +13,21 @@ import java.util.List;
 import java.util.Optional;
 
 public class JDBCTemplate<T> {
-    private static Logger logger = LogManager.getLogger(UserDaoJDBC.class);
+    private static Logger logger = LogManager.getLogger(JDBCTemplate.class);
     private final SessionManagerJdbc sessionManager;
     private final DbExecutor<T> dbExecutor;
-    private DbStatementCreator statementCreator;
+    private DbStatementCreator<T> statementCreator;
     private long recordId;
 
     public JDBCTemplate(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
-        this.statementCreator = new DbStatementCreator();
+        this.statementCreator = new DbStatementCreator<>();
     }
 
     public void create(T object) {
         String insertStatement = statementCreator.createInsertStatement(object);
-        List listValues = statementCreator.getListValues();
+        List<String> listValues = statementCreator.getListValues();
         try {
             recordId = dbExecutor.insertRecord(getConnection(), insertStatement, listValues);
         } catch (Exception exception) {
@@ -38,7 +38,7 @@ public class JDBCTemplate<T> {
 
     public void update(T object) {
         String updateStatement = statementCreator.createUpdateStatement(object);
-        List values = statementCreator.getListValues();
+        List<String> values = statementCreator.getListValues();
         try {
             dbExecutor.updateRecord(getConnection(), updateStatement, values);
         } catch (SQLException sqlException) {

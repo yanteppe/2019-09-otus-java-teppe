@@ -30,7 +30,7 @@ public class DbServiceHibernateDemo {
 
       // Create User
       System.out.println("\nUSER DEMO:");
-      var user = new User("User 1", 20);
+      var user = new User("User 1");
       var address = new AddressDataSet("Address 1");
       user.setAddress(address);
       user.setPhones(List.of(

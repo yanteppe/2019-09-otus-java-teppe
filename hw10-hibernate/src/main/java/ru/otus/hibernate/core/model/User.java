@@ -11,7 +11,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private int age;
     @OneToOne(cascade = CascadeType.ALL)
     private AddressDataSet address;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -20,15 +19,13 @@ public class User {
     public User() {
     }
 
-    public User(long id, String name, int age) {
+    public User(long id, String name) {
         this.id = id;
         this.name = name;
-        this.age = age;
     }
 
-    public User(String name, int age) {
+    public User(String name) {
         this.name = name;
-        this.age = age;
     }
 
     public long getId() {
@@ -45,14 +42,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public AddressDataSet getAddress() {
@@ -76,7 +65,6 @@ public class User {
         return "User{" +
               "id=" + id +
               ", name='" + name + '\'' +
-              ", age=" + age +
               ", address=" + address +
               ", phones=" + phones +
               '}';

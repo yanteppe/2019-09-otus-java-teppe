@@ -10,13 +10,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String name;
     private int age;
-
     @OneToOne(cascade = CascadeType.ALL)
     private AddressDataSet address;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PhoneDataSet> phones = new ArrayList<>();
 

@@ -33,22 +33,6 @@ public class DbServiceUserImpl implements DBServiceUser {
         }
     }
 
-//    @Override
-//    public void updateUser(User user) {
-//        try (SessionManager sessionManager = userDao.getSessionManager()) {
-//            sessionManager.beginSession();
-//            try {
-//                userDao.updateUser(user);
-//                sessionManager.commitSession();
-//                logger.info("Update User to: " + user.toString());
-//            } catch (Exception exception) {
-//                logger.error(exception.getMessage(), exception);
-//                sessionManager.rollbackSession();
-//                throw new DbServiceException(exception);
-//            }
-//        }
-//    }
-
     @Override
     public Optional<User> getUser(long id) {
         try (SessionManager sessionManager = userDao.getSessionManager()) {

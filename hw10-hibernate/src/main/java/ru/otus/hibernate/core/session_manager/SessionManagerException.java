@@ -1,13 +1,12 @@
 package ru.otus.hibernate.core.session_manager;
 
-
 public class SessionManagerException extends RuntimeException {
 
-    public SessionManagerException(String message) {
-        super(message);
-    }
+   public SessionManagerException(String message) {
+      super(message);
+   }
 
-    public SessionManagerException(Exception exception) {
-        super(exception);
-    }
+   public SessionManagerException(Exception exception) {
+      super(exception);
+   }
 }

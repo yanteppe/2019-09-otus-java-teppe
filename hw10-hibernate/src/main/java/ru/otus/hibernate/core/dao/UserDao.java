@@ -9,11 +9,11 @@ public interface UserDao {
 
     long saveUser(User user);
 
-//    void updateUser(User user);
+    //void updateUser(User user);
+
+    Optional<User> getUser(long id);
 
     Optional<User> findById(long id);
-
-    Optional<User> loadUser(long id);
 
     SessionManager getSessionManager();
 }

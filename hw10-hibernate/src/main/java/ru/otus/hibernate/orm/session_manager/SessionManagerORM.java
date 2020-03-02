@@ -3,7 +3,6 @@ package ru.otus.hibernate.orm.session_manager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import ru.otus.hibernate.core.session_manager.DatabaseSession;
 import ru.otus.hibernate.core.session_manager.SessionManager;
 import ru.otus.hibernate.core.session_manager.SessionManagerException;
 
@@ -58,12 +57,10 @@ public class SessionManagerORM implements SessionManager {
       if (session == null || !session.isConnected()) {
          return;
       }
-
       Transaction transaction = databaseSessionORM.getTransaction();
       if (transaction == null || !transaction.isActive()) {
          return;
       }
-
       try {
          databaseSessionORM.closeSession();
          databaseSessionORM = null;

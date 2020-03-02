@@ -49,7 +49,7 @@ public class UserDaoORM implements UserDao {
    }
 
    @Override
-   public Optional<User> loadUser(long id) {
+   public Optional<User> getUser(long id) {
       DatabaseSessionORM session = sessionManager.getCurrentSession();
       try {
          return Optional.ofNullable(session.getORMSession().load(User.class, id));

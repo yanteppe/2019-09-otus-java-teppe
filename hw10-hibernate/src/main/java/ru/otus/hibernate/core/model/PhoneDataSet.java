@@ -8,11 +8,9 @@ public class PhoneDataSet {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
    private String number;
-
    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    @JoinColumn(name = "user_id",nullable = false)
    private User user;
-
 
    public PhoneDataSet() {
    }
@@ -39,7 +37,6 @@ public class PhoneDataSet {
       return "PhoneDataSet{" +
             "id=" + id +
             ", number='" + number + '\'' +
-            ", user=" + user +
             '}';
    }
 }

@@ -65,10 +65,10 @@ public class UserDaoORM implements UserDao {
    public List<User> getAllUsers() {
       DatabaseSessionORM session = sessionManagerORM.getCurrentSession();
       try {
-         return session.getORMSession().createStoredProcedureCall("SELECT u FROM User u", User.class).getResultList();
+         return session.getORMSession().createCriteria(User.class).list();
       } catch (Exception exception) {
          logger.error(exception.getMessage(), exception);
-   }
+      }
       return Collections.emptyList();
    }
 

@@ -1,8 +1,8 @@
 package ru.otus.web_server.core.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 @Entity
 public class User {
@@ -10,8 +10,10 @@ public class User {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
    private String name;
+
    @OneToOne(cascade = CascadeType.ALL)
    private AddressDataSet address;
+
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<PhoneDataSet> phones = new ArrayList<>();
 

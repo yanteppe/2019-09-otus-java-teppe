@@ -77,16 +77,15 @@ public class SessionManagerORM implements SessionManager {
 
    private void checkSessionAndTransaction() {
       if (databaseSessionORM == null) {
-         throw new SessionManagerException("DatabaseSession not opened ");
+         throw new SessionManagerException("DatabaseSession is not open");
       }
       Session session = databaseSessionORM.getORMSession();
       if (session == null || !session.isConnected()) {
-         throw new SessionManagerException("Session not opened ");
+         throw new SessionManagerException("Session is not open");
       }
-
       Transaction transaction = databaseSessionORM.getTransaction();
       if (transaction == null || !transaction.isActive()) {
-         throw new SessionManagerException("Transaction not opened ");
+         throw new SessionManagerException("Transaction is not open");
       }
    }
 }

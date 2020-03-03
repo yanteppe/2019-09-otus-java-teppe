@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface UserDao {
 
-    long saveUser(User user);
+   long saveUser(User user);
 
-    Optional<User> findById(long id);
+   Optional<User> findById(long id);
 
-    Optional<User> getUser(long id);
+   Optional<User> getUser(long id);
 
-    List<User> getAllUsers();
+   List<User> getAllUsers();
 
-    SessionManager getSessionManager();
+   SessionManager getSessionManager();
 }

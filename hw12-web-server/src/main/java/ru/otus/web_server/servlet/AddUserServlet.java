@@ -1,6 +1,5 @@
 package ru.otus.web_server.servlet;
 
-import ru.otus.web_server.core.model.User;
 import ru.otus.web_server.core.service.DBServiceUser;
 import ru.otus.web_server.services.TemplateProcessor;
 

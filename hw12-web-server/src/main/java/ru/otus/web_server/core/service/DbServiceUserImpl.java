@@ -6,6 +6,7 @@ import ru.otus.web_server.core.dao.UserDao;
 import ru.otus.web_server.core.model.User;
 import ru.otus.web_server.core.session_manager.SessionManager;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,23 +36,7 @@ public class DbServiceUserImpl implements DBServiceUser {
     }
 
     @Override
-    public void updateUser(User user) {
-        try (SessionManager sessionManager = userDao.getSessionManager()) {
-            sessionManager.beginSession();
-            try {
-                userDao.updateUser(user);
-                sessionManager.commitSession();
-                logger.info("Update User to: " + user.toString());
-            } catch (Exception exception) {
-                logger.error(exception.getMessage(), exception);
-                sessionManager.rollbackSession();
-                throw new DbServiceException(exception);
-            }
-        }
-    }
-
-    @Override
-    public Optional<User> getUserById(long id) {
+    public Optional<User> getUser(long id) {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
@@ -67,23 +52,15 @@ public class DbServiceUserImpl implements DBServiceUser {
     }
 
     @Override
-    public Optional<User> getUserByParameter(String parameter) {
+    public List<User> getUsers() {
         try (SessionManager sessionManager = userDao.getSessionManager()) {
             sessionManager.beginSession();
             try {
-                Optional<User> userOptional = userDao.findUserByParameter(parameter);
-                logger.info("Get User from DB by Login: " + userOptional.orElse(null));
-                return userOptional;
+                return userDao.getAllUsers();
             } catch (Exception exception) {
                 logger.error(exception.getMessage(), exception);
-                sessionManager.rollbackSession();
             }
-            return Optional.empty();
+            return Collections.emptyList();
         }
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
     }
 }

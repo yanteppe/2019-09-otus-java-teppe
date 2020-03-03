@@ -1,8 +1,8 @@
-package ru.otus.web_server.core.model;
+package ru.otus.hibernate.core.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 @Entity
 public class User {

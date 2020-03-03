@@ -9,11 +9,7 @@ public interface DBServiceUser {
 
     long saveUser(User user);
 
-    void updateUser(User user);
+    Optional<User> getUser(long id);
 
-    Optional<User> getUserById(long id);
-
-    Optional<User> getUserByParameter(String login);
-
-    List<User> getAllUsers();
+    List<User> getUsers();
 }

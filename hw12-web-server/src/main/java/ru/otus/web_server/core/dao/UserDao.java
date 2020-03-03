@@ -10,11 +10,9 @@ public interface UserDao {
 
     long saveUser(User user);
 
-    void updateUser(User user);
-
     Optional<User> findById(long id);
 
-    Optional<User> findUserByParameter(String login);
+    Optional<User> getUser(long id);
 
     List<User> getAllUsers();
 

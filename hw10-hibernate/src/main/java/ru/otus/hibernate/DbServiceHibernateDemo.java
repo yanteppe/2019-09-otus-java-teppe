@@ -46,6 +46,10 @@ public class DbServiceHibernateDemo {
       Optional<User> userFromDatabase = dbServiceUser.getUser(userId);
       System.out.println("\nGET USER FROM DATABASE:");
       System.out.println(userFromDatabase.toString());
+
+      // Print User data
+      System.out.println("\nGET USER PHONES: " + userFromDatabase.get().getPhones());
+      System.out.println("\nGET USER ADDRESS: " + userFromDatabase.get().getAddress());
    }
 
    public static SessionFactory getSessionFactory(String configFile, List<Class> annotatedClasses) {

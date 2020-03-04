@@ -7,22 +7,47 @@
 <div class="top">
     <h3>Admin page</h3>
     <form action="/admin" method="post">
-        <p><input type="text" name="userName" placeholder="Введите имя" required/></p>
-        <input type="submit" name="create" value="Создать нового пользователя">
+        <p>
+            <input type="text" name="userName" placeholder="Имя" required>
+        </p>
+        <p>
+            <input type="text" name="userAddress" placeholder="Адрес" required>
+        </p>
+
+        <input type="submit" name="create" value="Создать пользователя">
     </form>
     <p>
         <#list create as create>
-        Created User: name '${create.name}'<br>
+        Пользователь успешно создан: ${create.name}, ${create.address.street}<br>
         </#list>
+    </p>
     <hr>
+    <h4>Список пользователей</h4>
+    <table style="width: 400px">
+        <thead>
+        <tr>
+            <td style="width: 50px">Id</td>
+            <td style="width: 150px">Имя</td>
+            <td style="width: 400px">Адрес</td>
+        </tr>
+        </thead>
+        <tbody>
+        <#list users as user>
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.address.street}</td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
     <form action="/admin" method="post">
-        <p><input type="submit" name="getUsers" value="Показать список пользователей"></p>
+        <p>
+            <input type="submit" name="getUsers" value="Обновить список пользователей">
+        </p>
     </form>
-    <#list users as user>
-    name:${user.name}<br>
-    </#list>
-<form action="/admin" method="post">
-    <input type="submit" name="exitAdmin" value="Выход">
-</form>
+    <form action="/admin" method="post">
+        <input type="submit" name="exitAdmin" value="Выход">
+    </form>
 </div>
 </body>

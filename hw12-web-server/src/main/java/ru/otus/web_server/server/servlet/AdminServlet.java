@@ -1,5 +1,6 @@
 package ru.otus.web_server.server.servlet;
 
+import ru.otus.web_server.core.model.AddressDataSet;
 import ru.otus.web_server.core.model.User;
 import ru.otus.web_server.core.service.DBServiceUser;
 import ru.otus.web_server.server.service.TemplateProcessor;
@@ -39,7 +40,9 @@ public class AdminServlet extends HttpServlet {
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       if (request.getParameter(CREATE_USER) != null) {
          String userName = request.getParameter("userName");
+         String address = request.getParameter("userAddress");
          var savedUser = new User(userName);
+         savedUser.setAddress(new AddressDataSet(address));
          dbServiceUser.saveUser(savedUser);
          Map<String, Object> variables = new HashMap<>();
          variables.put(CREATE_USER, Collections.singletonList(savedUser));

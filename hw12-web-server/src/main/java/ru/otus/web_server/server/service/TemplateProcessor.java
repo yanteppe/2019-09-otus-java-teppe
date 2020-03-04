@@ -14,8 +14,7 @@ public class TemplateProcessor {
 
    public TemplateProcessor() {
       configuration = new Configuration(Configuration.VERSION_2_3_28);
-      configuration.setClassForTemplateLoading(this.getClass(), "/templates/"); // resource
-      // configuration.setDirectoryForTemplateLoading(new File("/templates/")); // directory
+      configuration.setClassForTemplateLoading(this.getClass(), "/templates/");
       configuration.setDefaultEncoding("UTF-8");
    }
 

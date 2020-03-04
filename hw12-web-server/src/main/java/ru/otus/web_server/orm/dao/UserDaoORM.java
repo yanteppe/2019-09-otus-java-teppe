@@ -24,7 +24,7 @@ public class UserDaoORM implements UserDao {
 
    @Override
    public long saveUser(User user) {
-      DatabaseSessionORM currentSession = sessionManagerORM.getCurrentSession();
+      var currentSession = sessionManagerORM.getCurrentSession();
       try {
          Session session = currentSession.getORMSession();
          if (user.getId() > 0) {
@@ -41,7 +41,7 @@ public class UserDaoORM implements UserDao {
 
    @Override
    public Optional<User> findById(long id) {
-      DatabaseSessionORM session = sessionManagerORM.getCurrentSession();
+      var session = sessionManagerORM.getCurrentSession();
       try {
          return Optional.ofNullable(session.getORMSession().find(User.class, id));
       } catch (Exception exception) {
@@ -63,7 +63,7 @@ public class UserDaoORM implements UserDao {
 
    @Override
    public List<User> getAllUsers() {
-      DatabaseSessionORM session = sessionManagerORM.getCurrentSession();
+      var session = sessionManagerORM.getCurrentSession();
       try {
          return session.getORMSession().createCriteria(User.class).list();
       } catch (Exception exception) {

@@ -8,7 +8,7 @@ public class PhoneDataSet {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private long id;
    private String number;
-   @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @ManyToOne(cascade = CascadeType.ALL)
    @JoinColumn(name = "user_id",nullable = false)
    private User user;
 

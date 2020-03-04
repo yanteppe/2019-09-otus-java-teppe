@@ -9,7 +9,7 @@ import ru.otus.web_server.server.ServerStarter;
 import java.util.List;
 
 /**
- * Start App<br>
+ * Start App
  * Start page: http://localhost:8989/index.html
  * Authentication - login: admin, password: admin
  */

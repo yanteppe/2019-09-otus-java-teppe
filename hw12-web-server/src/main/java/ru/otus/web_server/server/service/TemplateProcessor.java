@@ -24,8 +24,8 @@ public class TemplateProcessor {
          Template template = configuration.getTemplate(filename);
          template.process(data, stream);
          return stream.toString();
-      } catch (TemplateException e) {
-         throw new IOException(e);
+      } catch (TemplateException templateException) {
+         throw new IOException(templateException);
       }
    }
 }

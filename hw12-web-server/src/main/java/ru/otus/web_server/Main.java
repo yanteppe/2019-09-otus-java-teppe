@@ -9,14 +9,15 @@ import ru.otus.web_server.server.ServerStarter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Start App<br>
+ * Authentication - login: admin, password: admin
+ */
 public class Main {
-   private static final String HIBERNATE_CONFIG_FILE = "hibernate.cfg.xml";
-   private static List<Class> annotatedClasses = Arrays.asList(User.class, AddressDataSet.class, PhoneDataSet.class);
-   private static final int SERVER_PORT = 8989;
-   private static final String STATIC_RESOURCES = "/static";
+   private static List<Class> entities = List.of(User.class, AddressDataSet.class, PhoneDataSet.class);
 
    public static void main(String[] args) {
-      new ORMStarter(HIBERNATE_CONFIG_FILE, annotatedClasses).start();
-      new ServerStarter(SERVER_PORT, STATIC_RESOURCES).start();
+      new ORMStarter("hibernate.cfg.xml", entities).start();
+      new ServerStarter(8989, "/static").start();
    }
 }

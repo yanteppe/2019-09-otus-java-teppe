@@ -12,31 +12,24 @@ import ru.otus.web_server.server.servlet.AdminServlet;
 import ru.otus.web_server.server.servlet.LoginServlet;
 import ru.otus.web_server.server.servlet.filter.AuthorizationFilter;
 
-import java.io.IOException;
-
 public class ServerStarter {
-   private int SERVER_PORT;
-   private String STATIC_RESOURCES;
-   private static final UserAuthService USER_AUTHENTICATION_SERVICE = new UserAuthService();
+   private int serverPort;
+   private String staticResources;
    private DbServiceUserImpl dbServiceUser;
 
    public ServerStarter(int port, String resourcesPath) {
-      SERVER_PORT = port;
-      STATIC_RESOURCES = resourcesPath;
+      serverPort = port;
+      staticResources = resourcesPath;
    }
 
    public void start() {
       var resourceHandler = new ResourceHandler();
-      resourceHandler.setBaseResource(Resource.newClassPathResource(STATIC_RESOURCES));
+      resourceHandler.setBaseResource(Resource.newClassPathResource(staticResources));
       var context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-      context.addServlet(new ServletHolder(new LoginServlet(USER_AUTHENTICATION_SERVICE)), "/login");
-      try {
-         context.addServlet(new ServletHolder(new AdminServlet(dbServiceUser)), "/admin");
-      } catch (IOException exception) {
-         exception.printStackTrace();
-      }
+      context.addServlet(new ServletHolder(new LoginServlet(new UserAuthService())), "/login");
+      context.addServlet(new ServletHolder(new AdminServlet(dbServiceUser)), "/admin");
       context.addFilter(new FilterHolder(new AuthorizationFilter()), "/admin", null);
-      var server = new org.eclipse.jetty.server.Server(SERVER_PORT);
+      var server = new org.eclipse.jetty.server.Server(serverPort);
       server.setHandler(new HandlerList(resourceHandler, context));
       try {
          server.start();

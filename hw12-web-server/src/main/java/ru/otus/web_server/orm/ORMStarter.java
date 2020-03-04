@@ -12,28 +12,22 @@ import ru.otus.web_server.core.service.DbServiceUserImpl;
 import ru.otus.web_server.orm.dao.UserDaoORM;
 import ru.otus.web_server.orm.session_manager.SessionManagerORM;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ORMStarter {
-   private String HIBERNATE_CONFIG_FILE;
-   private List<Class> annotatedClasses;
+   private String hibernateConfigFile;
+   private List<Class> entities;
 
-   public ORMStarter(String HIBERNATE_CONFIG_FILE, List<Class> annotatedClasses) {
-      this.HIBERNATE_CONFIG_FILE = HIBERNATE_CONFIG_FILE;
-      this.annotatedClasses = annotatedClasses;
+   public ORMStarter(String hibernateConfigFile, List<Class> entities) {
+      this.hibernateConfigFile = hibernateConfigFile;
+      this.entities = entities;
    }
 
    public void start() {
-      SessionFactory sessionFactory = getSessionFactory(HIBERNATE_CONFIG_FILE, annotatedClasses);
+      SessionFactory sessionFactory = getSessionFactory(hibernateConfigFile, entities);
       var sessionManager = new SessionManagerORM(sessionFactory);
       var userDao = new UserDaoORM(sessionManager);
       var dbServiceUser = new DbServiceUserImpl(userDao);
-      //Initializing Cache
-//      MyCache<String, User> cacheUser = new MyCache<>();
-
-//      dbServiceCachedUser = new DBServiceCachedUser(userDao, cacheUser);
-
       // Create User
       var user = new User("User 1");
       user.setAddress(new AddressDataSet("Address 1"));

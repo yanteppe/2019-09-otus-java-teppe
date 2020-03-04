@@ -20,18 +20,18 @@ public class AdminServlet extends HttpServlet {
    private static final String CREATE_USER = "create";
    private static final String USERS_LIST = "users";
 
-   public AdminServlet(DBServiceUser dbServiceUser) throws IOException {
+   public AdminServlet(DBServiceUser dbServiceUser) {
       this.dbServiceUser = dbServiceUser;
       this.templateProcessor = new TemplateProcessor();
    }
 
    @Override
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      Map<String, Object> pageVariables = new HashMap<>();
-      pageVariables.put(USERS_LIST, Collections.emptyList());
-      pageVariables.put(CREATE_USER, Collections.emptyList());
+      Map<String, Object> variables = new HashMap<>();
+      variables.put(USERS_LIST, Collections.emptyList());
+      variables.put(CREATE_USER, Collections.emptyList());
       response.setContentType(CONTENT_TYPE);
-      response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
+      response.getWriter().println(templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, variables));
       response.setStatus(HttpServletResponse.SC_OK);
    }
 

@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
 
    @Override
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String username = request.getParameter("username");
+      String username = request.getParameter("login");
       String password = request.getParameter("password");
       if (userAuthService.verifyAuthenticationData(username, password)) {
          request.getSession();

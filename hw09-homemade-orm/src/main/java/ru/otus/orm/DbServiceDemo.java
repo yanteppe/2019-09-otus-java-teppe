@@ -22,8 +22,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DbServiceJDBCDemo {
-    private static Logger logger = LogManager.getLogger(DbServiceJDBCDemo.class);
+public class DbServiceDemo {
+    private static Logger logger = LogManager.getLogger(DbServiceDemo.class);
 
     public static void main(String[] args) throws Exception {
         System.out.println("DbServiceDemo\n");
@@ -36,7 +36,7 @@ public class DbServiceJDBCDemo {
         AccountDao accountDao = new AccountDaoJDBC(sessionManager, accountDbExecutor);
         DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
         DbServiceAccount dbServiceAccount = new DbServiceAccountImpl(accountDao);
-        DbServiceJDBCDemo demo = new DbServiceJDBCDemo();
+        DbServiceDemo demo = new DbServiceDemo();
         demo.createTables(dataSource);
 
         // User Demo

@@ -17,6 +17,7 @@ import java.util.List;
  * <br>
  * GarbageFirst: -XX:+UseG1GC<br>
  * ParallelGC:   -XX:+UseParallelGC<br>
+ * Memory settings: -Xms128m -Xmx128m<br>
  * <br>
  * actions: - the total number of operations of this type for the entire program cycle<br>
  * minor time - how many seconds were spent on this type of assembly<br>

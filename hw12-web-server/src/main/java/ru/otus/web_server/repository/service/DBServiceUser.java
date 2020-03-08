@@ -1,6 +1,6 @@
-package ru.otus.web_server.core.service;
+package ru.otus.web_server.repository.service;
 
-import ru.otus.web_server.core.model.User;
+import ru.otus.web_server.repository.model.User;
 
 import java.util.List;
 import java.util.Optional;

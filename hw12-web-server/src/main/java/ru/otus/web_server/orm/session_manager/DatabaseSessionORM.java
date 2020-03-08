@@ -2,7 +2,7 @@ package ru.otus.web_server.orm.session_manager;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import ru.otus.web_server.core.session_manager.DatabaseSession;
+import ru.otus.web_server.repository.session_manager.DatabaseSession;
 
 public class DatabaseSessionORM implements DatabaseSession {
    private final Session session;

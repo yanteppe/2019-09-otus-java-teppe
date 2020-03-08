@@ -1,4 +1,4 @@
-package ru.otus.web_server.core.session_manager;
+package ru.otus.web_server.repository.session_manager;
 
 public interface SessionManager extends AutoCloseable {
 

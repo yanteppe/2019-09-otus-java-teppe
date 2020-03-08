@@ -1,8 +1,8 @@
 package ru.otus.web_server;
 
-import ru.otus.web_server.core.model.AddressDataSet;
-import ru.otus.web_server.core.model.PhoneDataSet;
-import ru.otus.web_server.core.model.User;
+import ru.otus.web_server.repository.model.AddressDataSet;
+import ru.otus.web_server.repository.model.PhoneDataSet;
+import ru.otus.web_server.repository.model.User;
 import ru.otus.web_server.orm.ORMStarter;
 import ru.otus.web_server.server.ServerStarter;
 

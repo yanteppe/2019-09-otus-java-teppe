@@ -3,8 +3,8 @@ package ru.otus.web_server.orm.session_manager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import ru.otus.web_server.core.session_manager.SessionManager;
-import ru.otus.web_server.core.session_manager.SessionManagerException;
+import ru.otus.web_server.repository.session_manager.SessionManager;
+import ru.otus.web_server.repository.session_manager.SessionManagerException;
 
 public class SessionManagerORM implements SessionManager {
    private DatabaseSessionORM databaseSessionORM;

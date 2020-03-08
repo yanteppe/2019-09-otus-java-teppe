@@ -1,4 +1,4 @@
-package ru.otus.web_server.core.service;
+package ru.otus.web_server.repository.service;
 
 public class DbServiceException extends RuntimeException {
 

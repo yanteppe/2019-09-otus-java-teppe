@@ -6,7 +6,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
-import ru.otus.web_server.core.service.DBServiceUser;
+import ru.otus.web_server.repository.service.DBServiceUser;
 import ru.otus.web_server.server.service.UserAuthService;
 import ru.otus.web_server.server.servlet.AdminServlet;
 import ru.otus.web_server.server.servlet.LoginServlet;

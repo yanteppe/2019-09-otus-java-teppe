@@ -1,8 +1,8 @@
 package ru.otus.web_server.server.servlet;
 
-import ru.otus.web_server.core.model.AddressDataSet;
-import ru.otus.web_server.core.model.User;
-import ru.otus.web_server.core.service.DBServiceUser;
+import ru.otus.web_server.repository.model.AddressDataSet;
+import ru.otus.web_server.repository.model.User;
+import ru.otus.web_server.repository.service.DBServiceUser;
 import ru.otus.web_server.server.service.TemplateProcessor;
 
 import javax.servlet.http.HttpServlet;

@@ -5,8 +5,8 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.otus.web_server.core.service.DBServiceUser;
-import ru.otus.web_server.core.service.DbServiceUserImpl;
+import ru.otus.web_server.repository.service.DBServiceUser;
+import ru.otus.web_server.repository.service.DbServiceUserImpl;
 import ru.otus.web_server.orm.dao.UserDaoORM;
 import ru.otus.web_server.orm.session_manager.SessionManagerORM;
 

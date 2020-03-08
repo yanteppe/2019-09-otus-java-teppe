@@ -1,10 +1,10 @@
-package ru.otus.web_server.core.service;
+package ru.otus.web_server.repository.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.otus.web_server.core.dao.UserDao;
-import ru.otus.web_server.core.model.User;
-import ru.otus.web_server.core.session_manager.SessionManager;
+import ru.otus.web_server.repository.dao.UserDao;
+import ru.otus.web_server.repository.model.User;
+import ru.otus.web_server.repository.session_manager.SessionManager;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.otus.web_server.core.model;
+package ru.otus.web_server.repository.model;
 
 import javax.persistence.*;
 

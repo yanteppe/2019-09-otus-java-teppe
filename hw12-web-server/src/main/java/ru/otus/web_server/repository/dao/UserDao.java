@@ -1,7 +1,7 @@
-package ru.otus.web_server.core.dao;
+package ru.otus.web_server.repository.dao;
 
-import ru.otus.web_server.core.model.User;
-import ru.otus.web_server.core.session_manager.SessionManager;
+import ru.otus.web_server.repository.model.User;
+import ru.otus.web_server.repository.session_manager.SessionManager;
 
 import java.util.List;
 import java.util.Optional;

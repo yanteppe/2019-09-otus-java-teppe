@@ -1,7 +1,7 @@
 package ru.otus.orm;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.otus.orm.core.dao.AccountDao;
 import ru.otus.orm.core.dao.UserDao;
 import ru.otus.orm.core.model.Account;
@@ -42,7 +42,7 @@ public class DbServiceDemo {
         // User Demo
         System.out.println("\nUSER DEMO:");
         var user = new User(1, "X");
-        logger.info("CREATE USER: " + user.toString());
+        logger.info("CREATE USER: {}", user);
         long userId = dbServiceUser.saveUser(user);
         dbServiceUser.getUser(userId);
         user.setName("Y");
@@ -54,7 +54,7 @@ public class DbServiceDemo {
         // Account Demo
         System.out.println("ACCOUNT DEMO:");
         var account = new Account(1, "Account X", BigDecimal.ONE);
-        logger.info("CREATE ACCOUNT: " + account.toString());
+        logger.info("CREATE ACCOUNT: {}", account);
         long accId = dbServiceAccount.saveAccount(account);
         dbServiceAccount.getAccount(accId);
         account.setType("Account Y");

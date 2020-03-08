@@ -1,7 +1,7 @@
 package ru.otus.orm.core.service;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.otus.orm.core.dao.AccountDao;
 import ru.otus.orm.core.model.Account;
 import ru.otus.orm.core.session_manager.SessionManager;

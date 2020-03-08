@@ -1,7 +1,7 @@
 package ru.otus.web_server.core.service;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.otus.web_server.core.dao.UserDao;
 import ru.otus.web_server.core.model.User;
 import ru.otus.web_server.core.session_manager.SessionManager;
@@ -25,7 +25,7 @@ public class DbServiceUserImpl implements DBServiceUser {
          try {
             long userRecordId = userDao.saveUser(user);
             sessionManager.commitSession();
-            logger.info("Save User to DB with record ID: " + userRecordId);
+            logger.info("Save User to DB with record ID: {}", userRecordId);
             return userRecordId;
          } catch (Exception exception) {
             logger.error(exception.getMessage(), exception);
@@ -41,7 +41,7 @@ public class DbServiceUserImpl implements DBServiceUser {
          sessionManager.beginSession();
          try {
             Optional<User> userOptional = userDao.findById(id);
-            logger.info("Get User from DB by ID: " + userOptional.orElse(null));
+            logger.info("Get User from DB by ID: {}", userOptional.orElse(null));
             return userOptional;
          } catch (Exception exception) {
             logger.error(exception.getMessage(), exception);

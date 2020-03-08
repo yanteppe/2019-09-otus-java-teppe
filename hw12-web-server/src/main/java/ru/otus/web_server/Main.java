@@ -14,7 +14,7 @@ import java.util.List;
  * Authentication - login: admin, password: admin
  */
 public class Main {
-   private static List<Class> entities = List.of(User.class, AddressDataSet.class, PhoneDataSet.class);
+   private static List<Class<?>> entities = List.of(User.class, AddressDataSet.class, PhoneDataSet.class);
 
    public static void main(String[] args) {
       var dbServiceUser = new ORMStarter("hibernate.cfg.xml", entities).start();

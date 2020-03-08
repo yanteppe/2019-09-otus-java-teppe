@@ -14,9 +14,9 @@ import java.util.List;
 
 public class ORMStarter {
    private String hibernateConfigFile;
-   private List<Class> entities;
+   private List<Class<?>> entities;
 
-   public ORMStarter(String hibernateConfigFile, List<Class> entities) {
+   public ORMStarter(String hibernateConfigFile, List<Class<?>> entities) {
       this.hibernateConfigFile = hibernateConfigFile;
       this.entities = entities;
    }
@@ -28,10 +28,10 @@ public class ORMStarter {
       return new DbServiceUserImpl(userDao);
    }
 
-   public static SessionFactory getSessionFactory(String configFile, List<Class> annotatedClasses) {
+   public static SessionFactory getSessionFactory(String configFile, List<Class<?>> annotatedClasses) {
       Configuration configuration = new Configuration().configure(configFile);
       MetadataSources metadataSources = new MetadataSources(new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build());
-      for (Class clazz : annotatedClasses) {
+      for (Class<?> clazz : annotatedClasses) {
          metadataSources.addAnnotatedClass(clazz);
       }
       Metadata metadata = metadataSources.getMetadataBuilder().build();

@@ -21,6 +21,7 @@
         <module>hw08-json-object-writer</module>
         <module>hw09-homemade-orm</module>
         <module>hw10-hibernate</module>
+        <module>hw12-web-server</module>
     </modules>
 
     <properties>

@@ -25,8 +25,8 @@ public class SessionManagerJdbc implements SessionManager {
         try {
             connection = dataSource.getConnection();
             databaseSession = new DatabaseSessionJdbc(connection);
-        } catch (SQLException sqlException) {
-            throw new SessionManagerException(sqlException);
+        } catch (SQLException e) {
+            throw new SessionManagerException(e);
         }
     }
 

@@ -14,8 +14,8 @@ public class LoginServlet extends HttpServlet {
    public static final String CONTENT_TYPE = "text/html;charset=utf-8";
    private static final String LOGIN_PAGE_TEMPLATE = "login.html";
    private static final String INVALID_AUTHENTICATION_MESSAGE = "Login or password is invalid";
-   private TemplateProcessor templateProcessor;
-   private UserAuthService userAuthService;
+   private final TemplateProcessor templateProcessor;
+   private final UserAuthService userAuthService;
 
    public LoginServlet(UserAuthService userAuthService) {
       this.userAuthService = userAuthService;

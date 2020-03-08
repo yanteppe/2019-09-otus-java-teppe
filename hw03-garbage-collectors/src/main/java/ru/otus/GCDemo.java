@@ -18,7 +18,7 @@ import java.util.List;
  * GarbageFirst: -XX:+UseG1GC<br>
  * ParallelGC:   -XX:+UseParallelGC<br>
  * Memory settings: -Xms128m -Xmx128m<br>
- * <br>
+ * Connect to Liberica Mission Control - VM options: -Djava.rmi.server.hostname=localhost<br>
  * actions: - the total number of operations of this type for the entire program cycle<br>
  * minor time - how many seconds were spent on this type of assembly<br>
  * action average time - average time of one assembly of this type<br>

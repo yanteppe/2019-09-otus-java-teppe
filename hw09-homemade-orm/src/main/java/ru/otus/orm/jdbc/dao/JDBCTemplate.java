@@ -1,7 +1,7 @@
 package ru.otus.orm.jdbc.dao;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.otus.orm.jdbc.DbExecutor;
 import ru.otus.orm.jdbc.helper.DbStatementCreator;
 import ru.otus.orm.jdbc.session_manager.SessionManagerJdbc;

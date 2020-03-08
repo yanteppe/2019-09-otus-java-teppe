@@ -1,7 +1,7 @@
 package ru.otus.hibernate.orm.dao;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import ru.otus.hibernate.core.dao.UserDao;
 import ru.otus.hibernate.core.dao.UserDaoException;

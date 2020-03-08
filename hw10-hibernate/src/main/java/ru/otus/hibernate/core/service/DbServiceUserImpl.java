@@ -1,7 +1,7 @@
 package ru.otus.hibernate.core.service;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.otus.hibernate.core.dao.UserDao;
 import ru.otus.hibernate.core.model.User;
 import ru.otus.hibernate.core.session_manager.SessionManager;

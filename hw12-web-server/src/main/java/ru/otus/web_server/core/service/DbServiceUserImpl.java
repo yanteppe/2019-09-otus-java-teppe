@@ -1,11 +1,13 @@
-package ru.otus.hibernate.core.service;
+package ru.otus.web_server.core.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.otus.hibernate.core.dao.UserDao;
-import ru.otus.hibernate.core.model.User;
-import ru.otus.hibernate.core.session_manager.SessionManager;
+import ru.otus.web_server.core.dao.UserDao;
+import ru.otus.web_server.core.model.User;
+import ru.otus.web_server.core.session_manager.SessionManager;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class DbServiceUserImpl implements DBServiceUser {
@@ -46,6 +48,19 @@ public class DbServiceUserImpl implements DBServiceUser {
             sessionManager.rollbackSession();
          }
          return Optional.empty();
+      }
+   }
+
+   @Override
+   public List<User> getUsers() {
+      try (SessionManager sessionManager = userDao.getSessionManager()) {
+         sessionManager.beginSession();
+         try {
+            return userDao.getAllUsers();
+         } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
+         }
+         return Collections.emptyList();
       }
    }
 }

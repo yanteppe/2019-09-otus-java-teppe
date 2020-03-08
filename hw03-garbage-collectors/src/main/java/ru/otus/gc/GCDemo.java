@@ -17,7 +17,8 @@ import java.util.List;
  * <br>
  * GarbageFirst: -XX:+UseG1GC<br>
  * ParallelGC:   -XX:+UseParallelGC<br>
- * <br>
+ * Memory settings: -Xms128m -Xmx128m<br>
+ * Connect to Liberica Mission Control - VM options: -Djava.rmi.server.hostname=localhost<br>
  * actions: - the total number of operations of this type for the entire program cycle<br>
  * minor time - how many seconds were spent on this type of assembly<br>
  * action average time - average time of one assembly of this type<br>
@@ -48,8 +49,8 @@ public class GCDemo {
     }
 
     private static void switchOnMonitoring() {
-        List<GarbageCollectorMXBean> gcbeans = ManagementFactory.getGarbageCollectorMXBeans();
-        for (GarbageCollectorMXBean gcbean : gcbeans) {
+        List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
+        for (GarbageCollectorMXBean gcbean : gcBeans) {
             System.out.println("GC name:" + gcbean.getName());
             NotificationEmitter emitter = (NotificationEmitter) gcbean;
             NotificationListener listener = (notification, handback) -> {
@@ -58,7 +59,9 @@ public class GCDemo {
                     gcName = info.getGcName();
                     gcAction = info.getGcAction();
                     long duration = info.getGcInfo().getDuration();
-                    System.out.println("Start: " + info.getGcInfo().getStartTime() + " | Name:" + gcName + " | action:" + gcAction + " | gcCause:" + info.getGcCause() + " | action time:" + duration + " ms");
+                    System.out.println("Start: " +
+                          info.getGcInfo().getStartTime() + " | Name:" + gcName + " | action:"
+                          + gcAction + " | gcCause:" + info.getGcCause() + " | action time:" + duration + " ms");
                     if (gcName.contains("G1")) GarbageFirstGCStats.collectGarbageFirstGCStats(gcName, gcAction, duration);
                     else ParallelGCStats.collectParallelGCStats(gcName, gcAction, duration);
                 }

@@ -1,28 +1,30 @@
-package ru.otus.hibernate.orm.dao;
-
+package ru.otus.web_server.orm.dao;
+;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import ru.otus.hibernate.core.dao.UserDao;
-import ru.otus.hibernate.core.dao.UserDaoException;
-import ru.otus.hibernate.core.model.User;
-import ru.otus.hibernate.core.session_manager.SessionManager;
-import ru.otus.hibernate.orm.session_manager.DatabaseSessionORM;
-import ru.otus.hibernate.orm.session_manager.SessionManagerORM;
+import ru.otus.web_server.core.dao.UserDao;
+import ru.otus.web_server.core.dao.UserDaoException;
+import ru.otus.web_server.core.model.User;
+import ru.otus.web_server.core.session_manager.SessionManager;
+import ru.otus.web_server.orm.session_manager.DatabaseSessionORM;
+import ru.otus.web_server.orm.session_manager.SessionManagerORM;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class UserDaoORM implements UserDao {
-   private final SessionManagerORM sessionManager;
+   private final SessionManagerORM sessionManagerORM;
    private static Logger logger = LogManager.getLogger(UserDaoORM.class);
 
-   public UserDaoORM(SessionManagerORM sessionManager) {
-      this.sessionManager = sessionManager;
+   public UserDaoORM(SessionManagerORM sessionManagerORM) {
+      this.sessionManagerORM = sessionManagerORM;
    }
 
    @Override
    public long saveUser(User user) {
-      DatabaseSessionORM currentSession = sessionManager.getCurrentSession();
+      var currentSession = sessionManagerORM.getCurrentSession();
       try {
          Session session = currentSession.getORMSession();
          if (user.getId() > 0) {
@@ -39,7 +41,7 @@ public class UserDaoORM implements UserDao {
 
    @Override
    public Optional<User> findById(long id) {
-      DatabaseSessionORM session = sessionManager.getCurrentSession();
+      var session = sessionManagerORM.getCurrentSession();
       try {
          return Optional.ofNullable(session.getORMSession().find(User.class, id));
       } catch (Exception exception) {
@@ -50,7 +52,7 @@ public class UserDaoORM implements UserDao {
 
    @Override
    public Optional<User> getUser(long id) {
-      DatabaseSessionORM session = sessionManager.getCurrentSession();
+      DatabaseSessionORM session = sessionManagerORM.getCurrentSession();
       try {
          return Optional.ofNullable(session.getORMSession().load(User.class, id));
       } catch (Exception exception) {
@@ -60,7 +62,18 @@ public class UserDaoORM implements UserDao {
    }
 
    @Override
+   public List<User> getAllUsers() {
+      var session = sessionManagerORM.getCurrentSession();
+      try {
+         return session.getORMSession().createCriteria(User.class).list();
+      } catch (Exception exception) {
+         logger.error(exception.getMessage(), exception);
+      }
+      return Collections.emptyList();
+   }
+
+   @Override
    public SessionManager getSessionManager() {
-      return sessionManager;
+      return sessionManagerORM;
    }
 }

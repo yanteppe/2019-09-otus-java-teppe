@@ -1,14 +1,14 @@
 package ru.otus.web_server.orm.dao;
-;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import ru.otus.web_server.orm.session_manager.DatabaseSessionORM;
+import ru.otus.web_server.orm.session_manager.SessionManagerORM;
 import ru.otus.web_server.repository.dao.UserDao;
 import ru.otus.web_server.repository.dao.UserDaoException;
 import ru.otus.web_server.repository.model.User;
 import ru.otus.web_server.repository.session_manager.SessionManager;
-import ru.otus.web_server.orm.session_manager.DatabaseSessionORM;
-import ru.otus.web_server.orm.session_manager.SessionManagerORM;
 
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +65,7 @@ public class UserDaoORM implements UserDao {
    public List<User> getAllUsers() {
       var session = sessionManagerORM.getCurrentSession();
       try {
-         return session.getORMSession().createCriteria(User.class).list();
+         return session.getORMSession().createQuery("SELECT user FROM User user", User.class).list();
       } catch (Exception exception) {
          logger.error(exception.getMessage(), exception);
       }

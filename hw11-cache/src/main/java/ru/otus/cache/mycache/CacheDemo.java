@@ -3,8 +3,6 @@ package ru.otus.cache.mycache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.ref.WeakReference;
-
 public class CacheDemo {
    private static Logger logger = LogManager.getLogger(CacheDemo.class);
 

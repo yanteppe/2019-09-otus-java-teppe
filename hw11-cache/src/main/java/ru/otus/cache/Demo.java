@@ -75,10 +75,10 @@ public class Demo {
       return dbUserCacheService.getUser(userId);
    }
 
-   public static SessionFactory getSessionFactory(String configFile, List<Class<?>> annotatedClasses) {
+   public static SessionFactory getSessionFactory(String configFile, List<Class<?>> entityClasses) {
       Configuration configuration = new Configuration().configure(configFile);
       MetadataSources metadataSources = new MetadataSources(new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build());
-      for (Class<?> clazz : annotatedClasses) {
+      for (Class<?> clazz : entityClasses) {
          metadataSources.addAnnotatedClass(clazz);
       }
       Metadata metadata = metadataSources.getMetadataBuilder().build();

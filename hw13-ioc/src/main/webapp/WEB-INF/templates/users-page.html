@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div class="top">
+    <h3>Создание нового пользователя</h3>
+    <form action="#" th:action="@{/create}" th:object="${user}" method="POST" accept-charset="UTF-8">
+        <p><input id="holder-input" type="text" th:field="*{name}" placeholder="Имя" required>
+        <p><input type="text" th:field="*{surname}" placeholder="Фамилия" required>
+        <p><input type="text" th:field="*{age}" placeholder="Возраст" required>
+        <p><input type="text" th:field="*{city}" placeholder="Город" required>
+        <p><button type="submit" name="createUser">Создать пользователя</button>
+    </form>
+    <hr>
+    <h4>Список пользователей</h4>
+    <table style="width: 400px">
+        <thead>
+        <tr>
+            <td style="width: 50px">Id</td>
+            <td style="width: 200px">Имя</td>
+            <td style="width: 300px">Фамилия</td>
+            <td style="width: 150px">Возраст</td>
+            <td style="width: 250px">Город</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.surname}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${user.city}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p>
+    <form action="#" th:action="@{/logout}" method="POST">
+        <button type="submit" name="logout">Выход</button>
+    </form>
+    </p>
+</div>
+</body>

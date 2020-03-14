@@ -7,10 +7,10 @@ import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-public class CacheImpl<K, V> implements Cache<K, V>,  CacheListener<K, V> {
+public class CacheImpl<K, V> implements Cache<K, V>, CacheListener<K, V> {
    private static Logger logger = LogManager.getLogger(CacheImpl.class);
    private final Map<K, V> cache;
-   private final List<WeakReference<CacheListener<K,V>>> listeners;
+   private final List<WeakReference<CacheListener<K, V>>> listeners;
    private final ReferenceQueue<CacheListener<K, V>> listenersQueue;
 
    public CacheImpl() {
@@ -28,13 +28,12 @@ public class CacheImpl<K, V> implements Cache<K, V>,  CacheListener<K, V> {
    @Override
    public void remove(K key) {
       V value = cache.remove(key);
-      notifyListeners(key,value, String.format("CACHE REMOVE - key: %s, value: %s", key, value));
+      notifyListeners(key, value, String.format("CACHE REMOVE - key: %s, value: %s", key, value));
    }
 
    @Override
    public V get(K key) {
       V value = cache.get(key);
-      notifyListeners(key,value, String.format("CACHE GET - key: %s, value: %s", key, value));
       return value;
    }
 
@@ -48,18 +47,16 @@ public class CacheImpl<K, V> implements Cache<K, V>,  CacheListener<K, V> {
       listeners.remove(listener);
    }
 
-   @Override
-   public void notify(K key, V value, String event) {
-
-   }
-
    private void notifyListeners(K key, V value, String event) {
-      for (WeakReference<CacheListener<K, V>> listener: listeners) {
-         Objects.requireNonNull(listener.get()).notify(key, value, event);
+      for (WeakReference<CacheListener<K, V>> listener : listeners) {
+         if (listener != null) {
+            Objects.requireNonNull(listener.get()).notify(key, value, event);
+         }
       }
    }
 
-   public List<WeakReference<CacheListener<K, V>>> getListeners() {
-      return listeners;
+   @Override
+   public void notify(K key, V value, String event) {
+      logger.info("LISTENER - key: {}, value: {}, action: {}", key, value, event);
    }
 }

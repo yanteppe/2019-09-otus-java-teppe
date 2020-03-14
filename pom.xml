@@ -22,6 +22,7 @@
         <module>hw09-homemade-orm</module>
         <module>hw10-hibernate</module>
         <module>hw12-web-server</module>
+        <module>hw13-ioc</module>
         <module>hw14-sequence-of-numbers</module>
         <module>hw11-cache</module>
     </modules>

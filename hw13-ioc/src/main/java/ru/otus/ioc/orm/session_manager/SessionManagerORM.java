@@ -3,7 +3,6 @@ package ru.otus.ioc.orm.session_manager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.otus.ioc.repository.session_manager.SessionManager;
 import ru.otus.ioc.repository.session_manager.SessionManagerException;
@@ -13,7 +12,6 @@ public class SessionManagerORM implements SessionManager {
    private DatabaseSessionORM databaseSessionORM;
    private SessionFactory sessionFactory;
 
-   @Autowired
    public SessionManagerORM(SessionFactory sessionFactory) {
       if (sessionFactory == null) {
          throw new SessionManagerException("SessionFactory - null");

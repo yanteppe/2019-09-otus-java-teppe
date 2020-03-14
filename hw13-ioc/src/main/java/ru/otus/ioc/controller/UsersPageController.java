@@ -7,17 +7,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.otus.ioc.repository.domain.User;
+import ru.otus.ioc.repository.service.DBServiceUser;
 import ru.otus.ioc.repository.service.DbServiceUserImpl;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class UsersPageController {
    private DbServiceUserImpl dbServiceUser;
 
-   public UsersPageController(DbServiceUserImpl dbServiceUser) {
-      this.dbServiceUser = dbServiceUser;
+   public UsersPageController(DBServiceUser dbServiceUser) {
+      this.dbServiceUser = (DbServiceUserImpl) dbServiceUser;
    }
 
    @GetMapping("/users")
@@ -28,7 +26,7 @@ public class UsersPageController {
    }
 
    @PostMapping("/create")
-   public RedirectView createUser(@ModelAttribute("user") User user, HttpServletRequest request) {
+   public RedirectView createUser(@ModelAttribute("user") User user) {
       dbServiceUser.saveUser(user);
       return new RedirectView("/users", true);
    }

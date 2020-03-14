@@ -3,7 +3,6 @@ package ru.otus.ioc.orm.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.ioc.orm.session_manager.DatabaseSessionORM;
 import ru.otus.ioc.orm.session_manager.SessionManagerORM;
@@ -21,7 +20,6 @@ public class UserDaoORM implements UserDao {
    private final SessionManagerORM sessionManagerORM;
    private static Logger logger = LogManager.getLogger(UserDaoORM.class);
 
-   @Autowired
    public UserDaoORM(SessionManagerORM sessionManagerORM) {
       this.sessionManagerORM = sessionManagerORM;
    }

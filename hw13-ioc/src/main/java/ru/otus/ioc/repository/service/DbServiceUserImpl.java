@@ -2,8 +2,7 @@ package ru.otus.ioc.repository.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.otus.ioc.repository.dao.UserDao;
 import ru.otus.ioc.repository.domain.User;
 import ru.otus.ioc.repository.session_manager.SessionManager;
@@ -12,12 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class DbServiceUserImpl implements DBServiceUser {
    private static Logger logger = LogManager.getLogger(DbServiceUserImpl.class);
    private final UserDao userDao;
 
-   @Autowired
    public DbServiceUserImpl(UserDao userDao) {
       this.userDao = userDao;
    }

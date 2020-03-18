@@ -106,7 +106,7 @@ Maven:
 [Задание и решение](https://github.com/yanteppe/OtusJava/blob/master/hw03-garbage-collectors/Garbage%20collectors.md)
 
 ---
-**Занятие №8. Углубленные основы (примитивные типы, Remote debug, Hot swap).**
+**Занятие №8. Углубленные основы (Примитивные типы, Remote debug, Hot swap).**
 
 **Цели занятия**
 - Узнать детали устройства типов данных в Java.
@@ -160,7 +160,7 @@ Maven:
 [Задание и решение](https://github.com/yanteppe/OtusJava/blob/master/hw05-test-framework/Test%20framework.md)
 
 ---
-**Занятие №11. Java 8**
+**Занятие №11. Java 8.**
 
 **Цели занятия**
 - Введение в функциональное программироавние (ФП).

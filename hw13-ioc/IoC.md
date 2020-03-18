@@ -1,4 +1,4 @@
-**Лекция №25. Dependency injection.**
+**Занятие №25. Dependency injection.**
 
 **Цели занятия**
 - Изучить принципы работы контейнера TomCat.

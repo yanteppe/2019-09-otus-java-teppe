@@ -34,7 +34,7 @@
         <spring-webmvc.version>5.1.5.RELEASE</spring-webmvc.version>
         <spring-tx.version>5.1.5.RELEASE</spring-tx.version>
         <spring-orm.version>5.1.5.RELEASE</spring-orm.version>
-        <spring-security-web.version>5.1.0.RELEASE</spring-security-web.version>
+        <spring-security-web.version>5.2.10.RELEASE</spring-security-web.version>
         <spring-security-config.version>5.1.0.RELEASE</spring-security-config.version>
     </properties>
 
